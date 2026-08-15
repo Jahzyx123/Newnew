@@ -47,7 +47,7 @@ A collapsible panel in the prompt output section with common Suno tags like `[Bu
 Click **🔗 Share** to copy a URL that re-opens the tool with the exact same parameters, locks, toggles and settings.
 
 ### Other features
-- **160+ parameters** across 37+ categories and **10,000+ roll choices**, each with dozens→hundreds of options (including 14 dedicated emotional axes)
+- **170+ parameters** across 37+ categories and **12,000+ roll choices**, each with dozens→hundreds of options (including 24 dedicated emotional axes)
 - **90+ preset techno styles** with fusion blending
 - **Lock/unlock** individual values or whole categories
 - **👁 Toggle** any parameter or category on/off in the prompt
@@ -57,6 +57,7 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 - **🔒 Lock all / ♢ Unlock all** — freeze the whole matrix or free it again
 - **⚄ Surprise me** — randomize everything including locks and toggles
 - **🎭 Roll emotion / 🎼 Roll melody** — focused random buttons for happy, aggressive, euphoric, melancholic and many more emotional colors
+- **Balanced 1000-character style sampler** — after core melody/bass/drums, randomized details are selected across the whole matrix so lower categories do not vanish below the fold
 - **Two prompt outputs** (Style ~1000 chars + Full Brief ~3000 chars)
 - **Editable** prompt with live character counter and warning bar
 - **Search/filter** parameters, **export .txt**, sparkle FX, fully responsive

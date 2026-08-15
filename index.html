@@ -301,7 +301,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <div class="eyebrow">Feeling → melody</div>
       <h3 id="emotionDeckTitle">Give the machine a heart</h3>
       <p>Roll an emotional palette and the prompt will connect the feeling to the hook, harmony, performance, and release.</p>
-      <span class="emotion-axis-count">14 emotional axes · unlocked values reroll</span>
+      <span class="emotion-axis-count">24 emotional axes · unlocked values reroll</span>
     </div>
     <div class="emotion-readout" aria-live="polite">
       <div class="emotion-label">Current emotional signal</div>
@@ -638,7 +638,7 @@ const CATEGORIES_RAW = {
   },
   'Bass & low end': {
     fields: {
-      'Bass voice':['elastic acid bassline','subterranean sine sub','overdriven reese bass','rubbery analog sequence','pulsing FM bass','fuzz bass groove','deep dub sub','warped 303 line','analog synth bass','modular bass drone','squelchy electro bass','rumbling sub oscillator'],
+      'Bass voice':['elastic acid bassline','subterranean sine sub','overdriven reese bass','rubbery analog sequence','pulsing FM bass','fuzz bass groove','deep dub sub','warped 303 line','analog synth bass','modular bass drone','squelchy electro bass','rumbling sub oscillator','warm Moog ladder sub bass','thick Jupiter synth bass','FM growl bass with metallic overtones','folded wavetable bass','neuro reese bass movement','clean rounded sine bass','compressed mono bass pulse','overdriven square bass','gritty hoover bass stab','rolling octave bass riff','pitched rumble bass drone','granular bass cloud','vintage SH-101 bassline','modulated MS-20 bass','phase-distorted bass growl','clipped hardtechno bass thump','deep dubwise bass note','resonant rubber bass','stereo chorus bass layer','breathing sidechained bass','percussive FM bass pluck','metallic industrial bass tone','wide supersaw bass undercurrent','mutated modular bass sequence','low-passed reese wall','vibrating sub sine','vowel-formant bass growl','crunchy digital bass','elastic pitch-bent bass','rolling acid techno bass','minimal one-note sub pulse','broken syncopated bassline','heavy distorted rumble bass','bright electro bassline','icy digital sub bass','warm tape-saturated bass','liquid resonant bass','growling mid-bass with clean sub','deep organ bass drone','tribal tom-like bass hits','glitch-cut bass sequence','analog drift bass oscillator'],
       'Movement':['one-note hypnotic pedal','restless octave motion','sliding chromatic movement','syncopated call-and-response','constant saw wave pulse','evolving filter sweep bass','tribal bass riff','broken octave jumps'],
       'Kick relationship':['heavy pumping sidechain','tight locked kick-bass groove','ducked and breathing','bass enters between kick hits','kick and bass as one','call-and-response kick-bass','minimal bass under kick','complex interlocking'],
       'Bass-melody relationship':['supportive root-note bass foundation','melodic bassline following the lead','counter-melody bass in octaves','call-and-response bass with lead','octave doubling of melody phrase','bass and lead in harmonic unison','arpeggiated bass mirroring melody','walking bassline under chords','pedal tone drone beneath melody','rhythmic counterpart to lead motif','bass harmonizing with lead in thirds','evolving bass motif independent of lead','sub bass root with melodic mid layer','percussive bass accenting melody','bass echoing the last note of lead phrase','bass providing tension with suspended root','bass playing the inverse of lead melody','bass arpeggios following chord progression','deep sub rumble supporting melodic runs','bass sliding into harmonic alignment with lead','bass and lead in call-and-response across octaves','melodic bass solo in breakdown sections'],
@@ -648,8 +648,8 @@ const CATEGORIES_RAW = {
   'Melody & harmony': {
     fields: {
       'Key / mode':['F minor Phrygian','A minor Dorian','C minor Aeolian','D# minor','E minor Phrygian dominant','atonal tonal center','G minor Dorian','B Locrian','D Phrygian','F# minor Aeolian','C Dorian','E Hungarian minor','G# Phrygian'],
-      'Lead':['no lead melody','haunting minor-key motif','hypnotic 3-note synth phrase','fractured arpeggio','distant bell sequence','repeating 5-note hook','descending chromatic figure','sawtooth lead cry','filtered vocal-like lead','mutating modular melody','octave-jumping lead','wide interval melody','pentatonic motif','chromatic ascending line','call-and-response dual lead','legato synth string lead','staccato pluck motif','saw-wave anthem lead','detuned supersaw melody','glassy FM bell hook','oscillating trill motif','melodic sequential pattern','repeating 4-note cell','eastern scale lead','arpeggiated synth hook','portamento slide lead','rhythmic unison stab','minor third bounce pattern','tritone tension melody','whole-tone drifting line','Hungarian minor exotic run','phrygian dominant cry','lydian bright ascent','harmonic minor emotional leap','sliding fifth intervals','circular repeating phrase','wide interval emotional leap','speed-run note cascade','sparse atmospheric single notes','distorted melody squelch'],
-      'Harmony':['minimal modal drone','dark suspended chords','two-chord tension loop','chromatic stabs','no chords, rhythm only','pads with slow movement','organ chord hits','cluster chord tension','evolving pad harmony'],
+      'Lead':['no lead melody','haunting minor-key motif','hypnotic 3-note synth phrase','fractured arpeggio','distant bell sequence','repeating 5-note hook','descending chromatic figure','sawtooth lead cry','filtered vocal-like lead','mutating modular melody','octave-jumping lead','wide interval melody','pentatonic motif','chromatic ascending line','call-and-response dual lead','legato synth string lead','staccato pluck motif','saw-wave anthem lead','detuned supersaw melody','glassy FM bell hook','oscillating trill motif','melodic sequential pattern','repeating 4-note cell','eastern scale lead','arpeggiated synth hook','portamento slide lead','rhythmic unison stab','minor third bounce pattern','tritone tension melody','whole-tone drifting line','Hungarian minor exotic run','phrygian dominant cry','lydian bright ascent','harmonic minor emotional leap','sliding fifth intervals','circular repeating phrase','wide interval emotional leap','speed-run note cascade','sparse atmospheric single notes','distorted melody squelch','soaring supersaw anthem lead','warm analog synth vocal lead','icy crystalline bell lead','bittersweet piano-like synth motif','raw mono acid lead melody','euphoric trance-pluck hook','aggressive octave stab lead','melancholic string-machine lead','rubbery playful bass lead','cinematic brass synth melody','whispering granular lead','metallic FM scream lead','dreamy chorus-soaked lead','deep hypnotic drone melody','bright major-key rave lead','dark cyberpunk siren lead','humanized imperfect synth phrase','slow-burning two-note lead','rapid-fire arpeggiated lead','wide stereo unison lead','retro 90s rave lead hook','microtonal sliding lead','tender music-box synth motif','ferocious distorted lead riff','minimal one-note emotional lead','question-and-answer lead phrase','ascending victory lead','descending grief lead','floating glass lead texture','resonant vowel-formant lead','plucked kalimba-like synth lead','modular random-voltage melody','evolving eight-bar lead motif','saturated hoover lead hook','sorrowful vocal-formant lead','angular IDM lead sequence','ceremonial chant-like synth lead','nostalgic tape-warped lead','ecstatic high-register lead','submerged underwater lead melody','sunrise-resolution lead phrase'],
+      'Harmony':['minimal modal drone','dark suspended chords','two-chord tension loop','chromatic stabs','no chords, rhythm only','pads with slow movement','organ chord hits','cluster chord tension','evolving pad harmony','four-chord euphoric progression','bittersweet minor-to-major lift','one-note drone with moving overtones','wide cinematic chord wash','broken chord arpeggio harmony','haunting choir chord bed','warm analog chord memory','cold metallic chord sequence','suspended ninth chords','minor seventh haze','bright major chord flashes','dissonant cluster resolving late','power-chord techno stabs','deep dub chord echoes','ritual open-fifth harmony','pulsing gated chord sequence','call-and-response chord hits','slowly morphing chord progression','three-chord melancholy loop','heroic ascending chord progression','minimal bass-note harmony','jazz-inflected seventh voicings','microtonal shifting harmony','angelic pad chords over dark bass','granular chord fragments','acidic resonant chord stabs','nostalgic rave chord progression','dreamy unresolved seventh chords','dramatic orchestral chord swells','fragile single-note harmony','massive final-release chords','subtractive harmony with sudden gaps','phrygian dominant chord tension','dorian hopeful chord lift','chromatic descending heartbreak chords','lydian bright shimmer chords','harmonic minor cinematic progression','industrial power-stab harmony','floating ambient chord constellation','melody-implied harmony with no pads','repeating chord cell with evolving voicing'],
       'Melody layering':['single lead melody','dual layered counter-melody','call-and-response between synths','harmonized third interval above','octave doubled melody','canon-like melodic round','melody with supporting pad','arpeggiated counter-line beneath','interlocking melodic puzzle pieces','question and answer phrases','stacked triad harmonies','shadow melody an octave below','layered unison with detune','melodic call across stereo field','layered rhythmic counter-melody','layered melodic ostinato','counter-melody in opposite register','round robin melodic exchange','triple-stacked harmony layers','bass and melody in dialogue','melody doubled by synth strings','evolving contrapuntal lines','call-and-response with reverb tail','melodic layers entering sequentially','overlapping phrase cascades'],
       'Motion':['slow motif evolution','call-and-response phrases','repeating motif with mutations','occasional pitch-bent ornaments','arpeggiated progression','layered counter-melody','canon-like loop','random harmonic shifts']
     }
@@ -853,7 +853,17 @@ const CATEGORIES_RAW = {
       'Release / catharsis':['a huge euphoric lift that feels earned','a bittersweet release that leaves a beautiful ache','an aggressive drop that turns rage into joy','a quiet breakdown where the melody can breathe','a final chorus-like peak with no vocals','a sunrise resolution after dark tension','a sudden flood of harmony after minimalism','a cathartic octave leap at the climax','a warm afterglow rather than a hard ending','a triumphant return of the opening motif','a devastating pause before the beat comes back','a collective hands-up moment built from restraint','a final melodic answer that resolves the question','a drop that feels like physical freedom','a fragile ending still vibrating with hope','a beautiful collapse into noise and reverb','a last kick that feels like acceptance','a bright chord cutting through the darkest section','a release delayed until the final 16 bars','a euphoric peak followed by intimate comedown','a controlled exhale after maximum intensity','a final unresolved note that keeps longing alive','a ritual ending that feels transformative','a joyful explosion with no sentimental excess','a hard stop that leaves emotional silence'],
       'Contrast':['soft melody against brutal kick','happy harmony inside a dark warehouse','beautiful lead against ugly distortion','fragile detail inside massive low end','warm human timing against cold machine grid','euphoric peak after oppressive tension','playful hook over serious cinematic chords','tender breakdown followed by aggressive return','silence against maximal impact','nostalgic color in a futuristic world','spiritual calm inside physical rave force','romantic feeling with industrial surfaces','bright upper register over subterranean bass','vulnerable motif performed with confidence','ancient ritual language through modern synthesis','dreamlike atmosphere interrupted by sharp rhythm','clean hook surrounded by controlled chaos','lonely melody answered by communal percussion','delicate vocal texture without lyrical explanation','sadness that makes the body want to dance'],
       'Vocal emotion':['instrumental only, emotion carried by the synth melody','wordless exhale textures that feel relieved','distant choir color suggesting collective hope','ghostly vocal fragments full of longing','robotic syllables with human vulnerability','breathy tones that sit inside the pads','no intelligible words, only emotional vowel shapes','a triumphant chant-like layer without lyrics','processed sighs appearing only in the breakdown','fierce shouted texture used as rhythmic punctuation','soft humming implied by the lead synth','distant call-and-response vocal ghosts','angelic texture with a dark undertow','raw human breaths under machine percussion','vocal-like resonance with no singer in front','a single transformed phrase used as memory','euphoric crowd-like texture at the final peak','melancholic choir haze behind the hook','playful chopped vowels as percussion','silence where vocals might be, letting melody speak'],
-      'Emotional detail':['tiny pitch bends that sound like a sigh','notes that arrive slightly late with feeling','a held note that refuses to let go','a bright accent after every dark phrase','subtle vibrato on the most vulnerable note','filter opening like a breath of courage','reverb tails that preserve the memory of each hook','a final note that trembles before resolving','small pauses that make the groove feel human','gentle detuning between layered voices','one unexpected major note in the minor world','velocity that grows with emotional pressure','a melodic answer whispered from the background','harmonic overtones that glow after the hit','silence used as a deliberate emotional gesture','microtonal bends that suggest uncertainty','a hook that becomes more confident each time','timbre changing from cold to warm across the track','a tiny imperfection that makes the motif believable','inner voices moving even when the chords repeat']
+      'Emotional detail':['tiny pitch bends that sound like a sigh','notes that arrive slightly late with feeling','a held note that refuses to let go','a bright accent after every dark phrase','subtle vibrato on the most vulnerable note','filter opening like a breath of courage','reverb tails that preserve the memory of each hook','a final note that trembles before resolving','small pauses that make the groove feel human','gentle detuning between layered voices','one unexpected major note in the minor world','velocity that grows with emotional pressure','a melodic answer whispered from the background','harmonic overtones that glow after the hit','silence used as a deliberate emotional gesture','microtonal bends that suggest uncertainty','a hook that becomes more confident each time','timbre changing from cold to warm across the track','a tiny imperfection that makes the motif believable','inner voices moving even when the chords repeat'],
+      'Emotional color':['electric pink joy','deep violet longing','midnight blue solitude','molten orange aggression','soft amber tenderness','acid green mischief','silver futuristic awe','blood red defiance','golden sunrise hope','glacier cyan distance','black velvet mystery','white-hot catharsis','rose-colored nostalgia','smoky gray uncertainty','ultraviolet sensuality','prismatic wonder','rust-colored grief','neon yellow confidence','teal spiritual calm','high-contrast emotional chiaroscuro'],
+      'Emotional trigger':['a sudden bright chord after darkness','a bass note that arrives like a heartbeat','a melody remembering itself','silence before the crowd-sized drop','a filter opening into unexpected warmth','a single humanized pitch bend','a distant vocal ghost answering the lead','a rhythm that turns panic into movement','a suspended chord finally resolving','a hook returning after total subtraction','a minor chord with one hopeful note','a perfectly timed octave leap','an imperfect note left in the final take','a reverb tail that refuses to disappear','a hard kick beneath a fragile melody','a new harmony entering from far away','a sudden stop that exposes the feeling','a high note held past comfort','a low drone that feels physically protective','a final detail heard only after the impact'],
+      'Melodic contour':['slowly rising toward the light','falling like a beautiful memory','spiraling upward with growing confidence','descending into intimate darkness','opening outward across wide intervals','repeating a small ache until it becomes joy','climbing in nervous uneven steps','floating on long suspended tones','pushing forward in sharp angular leaps','breathing in waves with deliberate rests','circling one note like a thought','fracturing then reassembling at the peak','moving from low earth to high sky','sinking before a sudden victorious ascent','staying close and vulnerable before widening','unfolding like a question then answering itself','jumping octaves with childlike wonder','sliding downward in sensual slow motion','building from sparse notes into a singing line','ending higher than it began'],
+      'Tension source':['desire held just out of reach','beauty fighting against distortion','a bright hook trapped in a dark harmony','the groove refusing to resolve','distance between two answering synths','a bassline pulling against the lead','silence delaying the emotional answer','minor-key gravity beneath happy rhythm','mechanical repetition against human imperfection','a melody that almost but never settles','too much energy held inside a small loop','a fragile texture surrounded by impact','the fear before an inevitable release','a warm chord appearing in a cold world','an old memory losing its original shape','a confident hook hiding a wounded note','the final answer postponed until the outro','polyrhythm creating physical unease','one dissonance kept alive for meaning','the body wanting to dance while the mind hesitates'],
+      'Listener effect':['make the listener grin without permission','make the chest feel heavy then open','make the body move before the mind decides','make a dark room feel suddenly safe','make nostalgia feel futuristic','make aggression feel liberating','make the drop feel like a personal victory','make people remember someone they miss','make tension pleasurable and physical','make the melody feel like a secret confession','make the crowd feel like one organism','make stillness feel enormous','make the listener feel brave','make the final chord feel like exhaling','make the groove feel mischievous','make beauty arrive through noise','make time feel suspended','make sadness danceable','make the hook impossible to forget','make the afterglow last beyond the track'],
+      'Inner voice':['I am still here','we can survive the night','let go and move forward','nothing is lost in the repetition','I remember the way home','do not be afraid of the dark','this pain can become motion','we are becoming one pulse','you are allowed to feel everything','the machine has learned tenderness','joy is a form of rebellion','the future is calling back','stay with the unresolved feeling','there is light inside the pressure','dance until the fear changes shape','the broken part still sings','we do not need words to connect','release is stronger than control','the night belongs to the brave','begin again from the kick'],
+      'Peak feeling':['total ecstatic surrender','hard-won hope','beautiful grief','fearless aggression','weightless joy','deep spiritual connection','sensual release','triumphant clarity','bittersweet acceptance','wild rebellious freedom','quiet inner peace','collective euphoria','melancholic beauty','dangerous confidence','tender vulnerability','cosmic awe','full-body catharsis','mysterious wonder','playful mischief','calm after the storm'],
+      'Afterglow':['smiling through exhausted tears','a warm chord still hanging in the air','quiet peace after maximum pressure','a final unresolved shimmer','the feeling of sunrise on the way home','the crowd dissolving into private memory','soft tape hiss around a hopeful motif','a heartbeat fading but not disappearing','relief with a trace of longing','the last note glowing in darkness','gentle gratitude after the violence','a beautiful scar left by the groove','silence that feels full rather than empty','the promise of another night','a melody remembered after everything stops','peaceful floating above the sub bass','the body still moving after the track ends','a final smile hidden in the reverb','acceptance without losing the fire','an open door into the next song'],
+      'Emotional temperature':['ice-cold and emotionally distant','cool and restrained','warm under the surface','sun-warmed and open','feverish and unstable','boiling with contained rage','frosted with melancholy','humid with sensual tension','electrically charged','soft as breath','volcanic at the peak','deeply grounded','weightless and astral','dry and confrontational','glowing from within','rapidly changing from cold to warm','darkly overheated','calm with a hidden spark','silver-cool futurism','radiant and impossible to ignore'],
+      'Emotional motion':['slow thaw into movement','constant forward emotional pressure','push and pull between hope and doubt','sudden flashes of joy','gradual transformation through repetition','restless oscillation between tenderness and rage','one long rising wave','spiral from fear into freedom','ebb and flow around a fixed hook','shattering into fragments then rebuilding','tightening until the drop releases everything','floating with periodic gravity wells','bouncing between playful and dangerous','moving from private to collective','accelerating with every melodic return','settling only after the final peak','circling back with a changed meaning','opening wider section by section','staying hypnotically suspended','ending in a clean emotional exhale']
     }
   },
   'Concept & visual world': {
@@ -1275,89 +1285,194 @@ function buildEmotionLine(compact = false) {
     ['arc', getVal('Emotional palette', 'Emotional arc')],
     ['melody', getVal('Emotional palette', 'Melodic feeling')],
     ['harmony', getVal('Emotional palette', 'Harmonic color')],
+    ['tone', getVal('Emotional palette', 'Emotional color')],
+    ['trigger', getVal('Emotional palette', 'Emotional trigger')],
+    ['contour', getVal('Emotional palette', 'Melodic contour')],
+    ['tension', getVal('Emotional palette', 'Tension source')],
+    ['effect', getVal('Emotional palette', 'Listener effect')],
+    ['voice', getVal('Emotional palette', 'Inner voice')],
+    ['peak', getVal('Emotional palette', 'Peak feeling')],
+    ['afterglow', getVal('Emotional palette', 'Afterglow')],
+    ['temperature', getVal('Emotional palette', 'Emotional temperature')],
+    ['motion', getVal('Emotional palette', 'Emotional motion')],
     ['hook', getVal('Emotional palette', 'Hook behavior')],
     ['release', getVal('Emotional palette', 'Release / catharsis')]
   ];
-  const items = (compact ? allItems.filter(([label]) => ['feeling', 'blend', 'melody', 'arc'].includes(label)) : allItems)
+  const compactLabels = ['feeling', 'blend', 'melody', 'tone', 'contour', 'peak', 'afterglow'];
+  const items = (compact ? allItems.filter(([label]) => compactLabels.includes(label)) : allItems)
     .filter(([, value]) => value);
-  const maxLength = compact ? 460 : 410;
+  const maxLength = compact ? 205 : 455;
   return items.length ? clipPromptText('Emotion: ' + items.map(([label, value]) => `${label} ${value}`).join('; ') + '.', maxLength) : '';
 }
 
+function buildEmotionNuanceLine(compact = false) {
+  const items = [
+    ['trigger', getVal('Emotional palette', 'Emotional trigger')],
+    ['tension', getVal('Emotional palette', 'Tension source')],
+    ['listener effect', getVal('Emotional palette', 'Listener effect')],
+    ['inner voice', getVal('Emotional palette', 'Inner voice')],
+    ['temperature', getVal('Emotional palette', 'Emotional temperature')],
+    ['motion', getVal('Emotional palette', 'Emotional motion')]
+  ].filter(([, value]) => value);
+  const maxLength = compact ? 125 : 285;
+  return items.length ? clipPromptText('Emotional nuance: ' + items.map(([label, value]) => `${label} ${value}`).join('; ') + '.', maxLength) : '';
+}
+
+function hashText(value) {
+  let hash = 2166136261;
+  for (const char of String(value || '')) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+const RANDOM_DETAIL_NAMES = {
+  'Tempo & timing':'tempo',
+  'FX & transitions':'fx',
+  'Arrangement & energy':'arrangement',
+  'Mix & production':'mix',
+  'Experimental & organic':'organic',
+  'Acid laboratory':'acid',
+  'Rhythm architecture':'rhythm',
+  'Groove & movement':'groove',
+  'Modulation system':'modulation',
+  'Oscillator & filter DNA':'oscillator',
+  'Tonal color':'tone',
+  'Space & psychoacoustics':'space',
+  'Reverb laboratory':'reverb',
+  'Delay laboratory':'delay',
+  'Dynamics & impact':'dynamics',
+  'Distortion chain':'distortion',
+  'Vocal design':'vocal',
+  'Organic mutation':'organic mutation',
+  'Glitch engine':'glitch',
+  'Micro-variation matrix':'variation',
+  'DJ utility':'DJ utility',
+  'Concept & visual world':'vision',
+  'Tuning & musical physics':'tuning',
+  'Performance & automation':'performance',
+  'Sub-techno DNA':'scene',
+  'Drum synthesis':'drum design',
+  'Bass synthesis':'bass design',
+  'Sequencing intelligence':'sequence',
+  'Final restraint':'focus',
+  '⚡ Custom':'custom'
+};
+
+function buildBalancedExtras(maxChars) {
+  // The old style builder walked state top-to-bottom, so later categories disappeared
+  // as soon as the 1000-character cap was reached. Rank categories from the current
+  // random state instead, giving every unlocked/enabled category a fair chance.
+  const protectedCategories = new Set([
+    'Core identity', 'Drum architecture', 'Drum synthesis', 'Bass & low end', 'Bass synthesis',
+    'Melody & harmony', 'Melodic Architecture', 'Emotional palette'
+  ]);
+  const groups = new Map();
+  Object.values(state).forEach(field => {
+    if (!field.enabled || protectedCategories.has(field.category)) return;
+    if (!groups.has(field.category)) groups.set(field.category, []);
+    groups.get(field.category).push(field);
+  });
+
+  const rankedGroups = [...groups.entries()]
+    .map(([category, fields]) => ({
+      category,
+      fields,
+      score: hashText(`${primaryStyle}|${blendStyle}|${category}|${fields.map(field => field.value).join('|')}`)
+    }))
+    .sort((a, b) => a.score - b.score);
+  const chosen = [];
+  let used = 0;
+  for (const group of rankedGroups) {
+    const fields = group.fields.slice().sort((a, b) => {
+      const aScore = hashText(`${group.score}|${a.name}|${a.value}`);
+      const bScore = hashText(`${group.score}|${b.name}|${b.value}`);
+      return aScore - bScore;
+    });
+    const field = fields[0];
+    if (!field || !field.value) continue;
+    const categoryName = RANDOM_DETAIL_NAMES[group.category] || group.category.toLowerCase();
+    const phrase = `${categoryName}: ${clipPromptText(field.value, 49)}`;
+    const addition = (chosen.length ? '; ' : '') + phrase;
+    if (used + addition.length > maxChars) continue;
+    chosen.push(phrase);
+    used += addition.length;
+    if (chosen.length >= 6) break;
+  }
+  return chosen.length ? 'Randomized detail: ' + chosen.join('; ') + '.' : '';
+}
+
 function buildStylePrompt() {
-  // Short, punchy style prompt for Suno's style field — under 1000 chars.
+  // Suno's style field is capped at 1000 characters. Protect the musical core,
+  // reserve space for emotional direction, then sample the remaining categories
+  // in a deterministic random-looking order instead of truncating top-to-bottom.
   const styleTag = STYLES[primaryStyle]?.tag || '';
   const bpmVal = includeBpm ? (STYLES[primaryStyle]?.bpm || getVal('Tempo & timing', 'BPM')) : '';
+  const baseBudget = 650;
+  // Leave room for the "Randomized detail:" label and final punctuation.
+  const extrasBudget = STYLE_LIMIT - baseBudget - 25;
   const parts = [];
-  const add = value => { if (value) parts.push(String(value).trim()); };
+  const appendPart = (value, maxLength) => {
+    if (!value) return;
+    const current = parts.join(' ');
+    const remaining = baseBudget - current.length - (current ? 1 : 0);
+    if (remaining <= 0) return;
+    const clipped = clipPromptText(value, maxLength);
+    // Do not leave a broken half-line such as "Emotion…" when the protected budget is full.
+    if (clipped && clipped.length <= remaining) parts.push(clipped);
+  };
 
   const mood = getVal('Core identity', 'Mood');
   const energy = getVal('Core identity', 'Energy');
   const genre = getVal('Core identity', 'Genre / subgenre');
-  const aesthetic = getVal('Core identity', 'Main aesthetic');
-  const openingBits = [mood, energy, genre].filter(Boolean);
-  let opening = openingBits.join(', ');
-  if (primaryStyle !== 'Custom Neon Forge') opening = primaryStyle + (opening ? ' — ' + opening : '');
-  if (bpmVal) opening += (opening ? ' ' : '') + `at ${bpmVal}.`;
-  add(opening);
-  add(styleTag ? styleTag + '.' : '');
+  let opening = [primaryStyle !== 'Custom Neon Forge' ? primaryStyle : '', mood, energy, genre].filter(Boolean).join(' — ');
+  if (bpmVal) opening += (opening ? ' ' : '') + `at ${bpmVal}`;
+  if (styleTag) opening += `; ${styleTag}`;
+  appendPart(opening + '.', 145);
 
-  // The emotion block deliberately links the feeling to melodic and harmonic decisions.
-  if (melodyAlways || melodyIntensity !== 'std') {
-    const mels = {
-      focus: 'Warm emotional melodic lead present throughout; evolving motif and layered arpeggiated harmony.',
-      drive: 'Powerful memorable melodic lead hook throughout; layered arpeggiated harmony; emotional chord progression; dramatic build and release.',
-      pure: 'MAXIMUM MELODY: soaring unforgettable lead melody present at all times; rich harmonic layers; multiple melodic motifs; lush pads; dramatic emotional progression; euphoric peak; the melody is the absolute centerpiece.'
-    };
-    add(mels[melodyIntensity] || 'A strong emotional melodic lead is present throughout; recurring hook.');
-  }
-  add(buildEmotionLine(true));
-
-  const rhythm = [
-    getVal('Tempo & timing', 'Rhythm feel'),
-    getVal('Tempo & timing', 'Timing'),
-    getVal('Tempo & timing', 'Syncopation')
-  ].filter(Boolean);
-  if (rhythm.length) add(rhythm.join(', ') + '.');
-
-  const drums = [
-    ['kick', getVal('Drum architecture', 'Kick')],
-    ['hats', getVal('Drum architecture', 'Hats')],
-    ['snare', getVal('Drum architecture', 'Snare / clap')]
-  ].filter(([, value]) => value).map(([label, value]) => `${label}: ${value}`);
-  if (drums.length) add('Drums — ' + drums.join(', ') + '.');
-
-  const bass = [getVal('Bass & low end', 'Bass voice'), getVal('Bass & low end', 'Movement')].filter(Boolean);
-  if (bass.length) add('Bass: ' + bass.join(', ') + '.');
-
-  const music = [
+  const melody = [
     getVal('Melody & harmony', 'Key / mode'),
     getVal('Melody & harmony', 'Lead'),
-    getVal('Synth palette', 'Lead synth')
+    getVal('Melody & harmony', 'Harmony'),
+    getVal('Melodic Architecture', 'Melodic register')
   ].filter(Boolean);
-  if (music.length) add(music.join(', ') + '.');
+  if (melody.length) appendPart('Melody: ' + melody.join('; ') + '.', 115);
 
-  const atmosphere = [aesthetic, getVal('Texture & atmosphere', 'World'), getVal('Sub-techno DNA', 'Scene flavor')].filter(Boolean);
-  if (atmosphere.length) add('World: ' + atmosphere.join(', ') + '.');
-  if (blendStyle) add(`Fused with ${blendStyle} influence.`);
+  const bass = [
+    getVal('Bass & low end', 'Bass voice'),
+    getVal('Bass & low end', 'Movement'),
+    getVal('Bass & low end', 'Bass-melody relationship')
+  ].filter(Boolean);
+  if (bass.length) appendPart('Bass: ' + bass.join('; ') + '.', 78);
 
-  const usedCats = new Set([
-    'Core identity','Tempo & timing','Drum architecture','Bass & low end','Emotional palette',
-    'Melody & harmony','Melodic Architecture','Synth palette','Texture & atmosphere','Sub-techno DNA'
-  ]);
-  const extras = Object.values(state)
-    .filter(field => field.enabled && !usedCats.has(field.category))
-    .map(field => field.value)
-    .filter(Boolean);
-  if (extras.length) add(extras.slice(0, 10).join('. ') + '.');
+  const drums = [
+    getVal('Drum architecture', 'Kick'),
+    getVal('Drum architecture', 'Hats'),
+    getVal('Drum architecture', 'Snare / clap'),
+    getVal('Drum architecture', 'Percussion')
+  ].filter(Boolean);
+  if (drums.length) appendPart('Drums: ' + drums.join('; ') + '.', 105);
 
-  let result = '';
-  for (const part of parts) {
-    const candidate = result ? result + ' ' + part : part;
-    if (candidate.length <= STYLE_LIMIT) result = candidate;
+  // Emotion gets priority over optional production adjectives, so the feeling never disappears at the cap.
+  appendPart(buildEmotionLine(true), 205);
+  if (melodyAlways || melodyIntensity !== 'std') {
+    const melodyRule = {
+      focus: 'Warm emotional lead present throughout; evolving motif and layered arpeggiated harmony.',
+      drive: 'Memorable emotional lead hook throughout; layered harmony and dramatic melodic release.',
+      pure: 'MAXIMUM MELODY: soaring lead always present; rich harmony, multiple motifs, lush pads, euphoric emotional climax.'
+    };
+    appendPart(melodyRule[melodyIntensity] || 'Strong emotional melodic lead throughout.', 115);
   }
-  // Never return an empty style prompt if the user hid every field.
-  return result || 'techno, instrumental, four-to-the-floor, focused club energy';
+  appendPart(buildEmotionNuanceLine(true), 125);
+
+  const groove = [getVal('Tempo & timing', 'Rhythm feel'), getVal('Tempo & timing', 'Timing')].filter(Boolean);
+  if (groove.length) appendPart('Groove: ' + groove.join(', ') + '.', 70);
+
+  const base = parts.join(' ');
+  const extras = buildBalancedExtras(extrasBudget);
+  const result = [base, extras].filter(Boolean).join(' ');
+  return clipPromptText(result || 'techno, instrumental, four-to-the-floor, focused club energy', STYLE_LIMIT);
 }
 
 function buildFullPrompt() {
@@ -1389,6 +1504,8 @@ function buildFullPrompt() {
   }
   const emotionLine = buildEmotionLine();
   if (emotionLine) lines.push(emotionLine);
+  const emotionNuanceLine = buildEmotionNuanceLine();
+  if (emotionNuanceLine) lines.push(emotionNuanceLine);
 
   pushLine('WORLD', [getVal('Core identity', 'Main aesthetic'), getVal('Texture & atmosphere', 'World'), getVal('Texture & atmosphere', 'Surface')], ' — ');
   pushLine('RHYTHM', [getVal('Tempo & timing', 'Rhythm feel'), getVal('Tempo & timing', 'Timing'), getVal('Tempo & timing', 'Syncopation')], ', ');
@@ -1538,7 +1655,7 @@ function rollMelody() {
   const melodyCats = new Set(['Emotional palette', 'Melody & harmony', 'Melodic Architecture', 'Synth palette', 'Tuning & musical physics']);
   let changed = 0;
   Object.values(state).forEach(field => {
-    const emotionalMelodyField = field.category === 'Emotional palette' && /Melodic|Harmonic|Hook|Release|Contrast|Emotional detail/i.test(field.name);
+    const emotionalMelodyField = field.category === 'Emotional palette' && /Melodic|Harmonic|Hook|Release|Contrast|Emotional detail|Color|Contour|Tension|Peak|Afterglow|Temperature|Motion/i.test(field.name);
     if ((melodyCats.has(field.category) && (field.category !== 'Emotional palette' || emotionalMelodyField)) && field.enabled && !field.locked) {
       field.value = pickField(field);
       changed++;
