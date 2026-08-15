@@ -15,6 +15,9 @@ Generate hyper-detailed **techno prompts for [Suno.com](https://suno.com)** with
 ### 🎧 Live Beat Preview
 Press **▶ Play beat** and hear a synthesized techno beat respond *live* to your current BPM, kick type, hats, snare, swing, key/mode, tribal percussion, bassline and acid line. Includes a spectrum visualizer.
 
+### ⚡ Maximum mode (always on)
+The randomizer removes options containing minimal/minimalist language, removes minimal style presets from the selector, and strongly favors huge, massive, aggressive, explosive, euphoric, relentless, and peak-time choices. Older presets and shared links are sanitized too, so generated prompts stay full-force.
+
 ### 🎭 Emotion → Melody deck (new!)
 The dedicated emotion deck rolls a large emotional palette — from **happy**, euphoric, tender and nostalgic to **aggressive**, feral, anxious and cathartic — then writes the feeling into the melody, harmony, hook behavior, performance and release. Use:
 - **🎭 Roll emotion** — rerolls only unlocked emotional axes.
@@ -47,7 +50,7 @@ A collapsible panel in the prompt output section with common Suno tags like `[Bu
 Click **🔗 Share** to copy a URL that re-opens the tool with the exact same parameters, locks, toggles and settings.
 
 ### Other features
-- **170+ parameters** across 37+ categories and **12,000+ roll choices**, each with dozens→hundreds of options (including 24 dedicated emotional axes)
+- **170+ parameters** across 37+ categories and **11,000+ maximum-energy roll choices**, each with dozens→hundreds of options (including 24 dedicated emotional axes)
 - **90+ preset techno styles** with fusion blending
 - **Lock/unlock** individual values or whole categories
 - **👁 Toggle** any parameter or category on/off in the prompt
@@ -57,6 +60,7 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 - **🔒 Lock all / ♢ Unlock all** — freeze the whole matrix or free it again
 - **⚄ Surprise me** — randomize everything including locks and toggles
 - **🎭 Roll emotion / 🎼 Roll melody** — focused random buttons for happy, aggressive, euphoric, melancholic and many more emotional colors
+- **⚡ Maximum mode** — minimal options are removed and high-impact choices are favored on every roll
 - **Balanced 1000-character style sampler** — after core melody/bass/drums, randomized details are selected across the whole matrix so lower categories do not vanish below the fold
 - **Two prompt outputs** (Style ~1000 chars + Full Brief ~3000 chars)
 - **Editable** prompt with live character counter and warning bar

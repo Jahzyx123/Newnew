@@ -248,9 +248,9 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-left">
-      <div class="eyebrow">Generative techno composer / v3</div>
+      <div class="eyebrow">Generative techno composer / v3 · MAXIMUM MODE</div>
       <h2>Forge a world.<br><em>Then make it move.</em></h2>
-      <p>Build hyper-detailed techno prompts for Suno. Roll the entire machine, lock what hits, and sculpt the emotional thread that makes the melody feel alive.</p>
+      <p>Build hyper-detailed techno prompts for Suno. Maximum energy is always on: no minimal options, no low-impact rolls, just huge sound and an emotional thread that makes the melody feel alive.</p>
     </div>
     <div class="stats">
       <div class="stat"><b id="activeCount">0</b><span>Parameters</span></div>
@@ -301,7 +301,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <div class="eyebrow">Feeling → melody</div>
       <h3 id="emotionDeckTitle">Give the machine a heart</h3>
       <p>Roll an emotional palette and the prompt will connect the feeling to the hook, harmony, performance, and release.</p>
-      <span class="emotion-axis-count">24 emotional axes · unlocked values reroll</span>
+      <span class="emotion-axis-count">24 emotional axes · maximum feeling · unlocked values reroll</span>
     </div>
     <div class="emotion-readout" aria-live="polite">
       <div class="emotion-label">Current emotional signal</div>
@@ -355,7 +355,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
     <!-- LEFT: CATEGORIES -->
     <section class="panel">
       <div class="controls">
-        <span class="label">PARAMETER MATRIX · LOCKED VALUES STAY · TOGGLE ANY OFF</span>
+        <span class="label">PARAMETER MATRIX · MAXIMUM ENERGY · LOCKED VALUES STAY · TOGGLE ANY OFF</span>
         <input class="search-input" id="searchInput" placeholder="🔍 Filter…" />
         <button class="btn sm" id="surpriseBtn">⚄ Surprise me</button>
         <button class="btn sm" id="drumsBtn" title="Randomize only drum/beat parameters — kick, hats, snare, percussion">🥁 Drums only</button>
@@ -608,6 +608,38 @@ const STYLES = {
   'Housey Techno':{tag:'friendlier warm bounce, easy body movement and techno drive'},
   'Breaks-Techno':{tag:'retro-modern broken rave beats and underground techno texture'}
 };
+
+// ═══════════════════════════════════════════════════════════
+//  MAXIMUM MODE — no minimal language, max-energy random rolls
+// ═══════════════════════════════════════════════════════════
+const MAXIMUM_BLOCKLIST = /\bminimal(?:ist|ism|ly)?\b/i;
+const MAXIMUM_ENERGY = /\b(?:maximum|maximal|huge|massive|gigantic|enormous|explosive|relentless|aggressive|ferocious|furious|hard|punishing|crushing|overwhelming|extreme|intense|high-voltage|peak-time|full-force|all-consuming|volcanic|titanic|monolithic|powerful|brutal|heavy|wild|ecstatic|euphoric|cathartic|surging|driving|force|dramatic|soaring|anthem|scream|heroic|victory|radiant|bright|rising|singing|full)\b/i;
+const MAXIMUM_BIAS = 1;
+
+function containsMinimumLanguage(value) {
+  return MAXIMUM_BLOCKLIST.test(String(value || ''));
+}
+
+function sanitizeMaximumText(value) {
+  return String(value || '').replace(/\bminimal(?:ist|ism|ly)?\b/gi, 'maximum');
+}
+
+function maximumOptions(options) {
+  const clean = (options || []).filter(option => !containsMinimumLanguage(option));
+  return clean.length ? clean : ['maximum full-force intensity'];
+}
+
+function pickMaximumOption(options) {
+  const clean = maximumOptions(options);
+  const maxEnergy = clean.filter(option => MAXIMUM_ENERGY.test(option));
+  return maxEnergy.length && Math.random() < MAXIMUM_BIAS ? pick(maxEnergy) : pick(clean);
+}
+
+// Styles such as Minimal Techno should not re-enter the generated prompt through
+// the style selector or a stale preset/share link.
+Object.keys(STYLES).forEach(name => {
+  if (containsMinimumLanguage(name) || containsMinimumLanguage(STYLES[name].tag)) delete STYLES[name];
+});
 
 // ─── CATEGORIES ───
 // Each category: { fields: { name: [options array] } }
@@ -987,6 +1019,13 @@ Object.entries(CATEGORIES_RAW).forEach(([cat, catData]) => {
   });
 });
 
+// Remove minimum-energy choices after all variation phrases have been generated.
+Object.entries(CATEGORIES_RAW).forEach(([, catData]) => {
+  Object.entries(catData.fields).forEach(([name, options]) => {
+    catData.fields[name] = maximumOptions(options);
+  });
+});
+
 // ═══════════════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════════════
@@ -1025,7 +1064,7 @@ function initState() {
         category: cat,
         name,
         opts: opts.slice(),
-        value: pick(opts),
+        value: pickMaximumOption(opts),
         locked: false,
         enabled: true,
         isCustom: false
@@ -1043,8 +1082,8 @@ customFields.forEach(cf => {
     key,
     category: '⚡ Custom',
     name: cf.name,
-    opts: cf.opts || [cf.value],
-    value: cf.value,
+    opts: maximumOptions(cf.opts || [cf.value]),
+    value: containsMinimumLanguage(cf.value) ? pickMaximumOption(cf.opts || [cf.value]) : cf.value,
     locked: cf.locked || false,
     enabled: cf.enabled !== false,
     isCustom: true,
@@ -1054,6 +1093,11 @@ customFields.forEach(cf => {
 });
 
 // ─── PRESETS ───
+function normalizeMaximumStyles() {
+  if (!STYLES[primaryStyle] || containsMinimumLanguage(primaryStyle)) primaryStyle = 'Custom Neon Forge';
+  if (!STYLES[blendStyle] || containsMinimumLanguage(blendStyle)) blendStyle = '';
+}
+
 function savePresets() {
   localStorage.setItem('nf_presets', JSON.stringify(presets));
 }
@@ -1159,7 +1203,7 @@ function render() {
     rollBtn.title = 'Randomize all unlocked in category';
     rollBtn.addEventListener('click', e => {
       e.stopPropagation();
-      fields.forEach(f => { if (!f.locked && f.enabled) f.value = pick(f.opts); });
+      fields.forEach(f => { if (!f.locked && f.enabled) f.value = pickField(f); });
       render();
     });
     head.appendChild(rollBtn);
@@ -1237,7 +1281,7 @@ function render() {
       valueDiv.addEventListener('click', e => {
         if (f.locked) return;
         // Show a mini inline editor? No, just reroll:
-        f.value = pick(f.opts);
+        f.value = pickField(f);
         render();
         if (f.isCustom) saveCustomFields();
       });
@@ -1262,7 +1306,7 @@ function render() {
 function getVal(cat, name) {
   const field = state[makeKey(cat, name)];
   // Disabled fields are genuinely removed from the prompt, not just dimmed in the UI.
-  return field && field.enabled ? String(field.value || '') : '';
+  return field && field.enabled ? sanitizeMaximumText(field.value) : '';
 }
 
 function buildPrompt() {
@@ -1393,7 +1437,7 @@ function buildBalancedExtras(maxChars) {
     const field = fields[0];
     if (!field || !field.value) continue;
     const categoryName = RANDOM_DETAIL_NAMES[group.category] || group.category.toLowerCase();
-    const phrase = `${categoryName}: ${clipPromptText(field.value, 49)}`;
+    const phrase = `${categoryName}: ${clipPromptText(sanitizeMaximumText(field.value), 49)}`;
     const addition = (chosen.length ? '; ' : '') + phrase;
     if (used + addition.length > maxChars) continue;
     chosen.push(phrase);
@@ -1407,8 +1451,9 @@ function buildStylePrompt() {
   // Suno's style field is capped at 1000 characters. Protect the musical core,
   // reserve space for emotional direction, then sample the remaining categories
   // in a deterministic random-looking order instead of truncating top-to-bottom.
-  const styleTag = STYLES[primaryStyle]?.tag || '';
-  const bpmVal = includeBpm ? (STYLES[primaryStyle]?.bpm || getVal('Tempo & timing', 'BPM')) : '';
+  const safePrimaryStyle = !STYLES[primaryStyle] || containsMinimumLanguage(primaryStyle) ? 'Custom Neon Forge' : primaryStyle;
+  const styleTag = sanitizeMaximumText(STYLES[safePrimaryStyle]?.tag || '');
+  const bpmVal = includeBpm ? (STYLES[safePrimaryStyle]?.bpm || getVal('Tempo & timing', 'BPM')) : '';
   const baseBudget = 650;
   // Leave room for the "Randomized detail:" label and final punctuation.
   const extrasBudget = STYLE_LIMIT - baseBudget - 25;
@@ -1426,10 +1471,11 @@ function buildStylePrompt() {
   const mood = getVal('Core identity', 'Mood');
   const energy = getVal('Core identity', 'Energy');
   const genre = getVal('Core identity', 'Genre / subgenre');
-  let opening = [primaryStyle !== 'Custom Neon Forge' ? primaryStyle : '', mood, energy, genre].filter(Boolean).join(' — ');
+  let opening = [safePrimaryStyle !== 'Custom Neon Forge' ? safePrimaryStyle : '', mood, energy, genre].filter(Boolean).join(' — ');
   if (bpmVal) opening += (opening ? ' ' : '') + `at ${bpmVal}`;
   if (styleTag) opening += `; ${styleTag}`;
   appendPart(opening + '.', 145);
+  if (blendStyle) appendPart('Fusion: ' + sanitizeMaximumText(blendStyle) + '.', 78);
 
   const melody = [
     getVal('Melody & harmony', 'Key / mode'),
@@ -1477,8 +1523,9 @@ function buildStylePrompt() {
 
 function buildFullPrompt() {
   // A labeled, newline-separated brief is easier to scan, edit, and paste into Suno.
-  const styleTag = STYLES[primaryStyle]?.tag || '';
-  const bpmVal = includeBpm ? (STYLES[primaryStyle]?.bpm || getVal('Tempo & timing', 'BPM')) : '';
+  const safePrimaryStyle = !STYLES[primaryStyle] || containsMinimumLanguage(primaryStyle) ? 'Custom Neon Forge' : primaryStyle;
+  const styleTag = sanitizeMaximumText(STYLES[safePrimaryStyle]?.tag || '');
+  const bpmVal = includeBpm ? (STYLES[safePrimaryStyle]?.bpm || getVal('Tempo & timing', 'BPM')) : '';
   const lines = [];
   const pushLine = (label, values, separator = ' · ') => {
     const clean = values.map(value => clipPromptText(value, 62)).filter(Boolean);
@@ -1486,11 +1533,11 @@ function buildFullPrompt() {
   };
 
   const identity = [getVal('Core identity', 'Mood'), getVal('Core identity', 'Energy'), getVal('Core identity', 'Genre / subgenre')];
-  let header = primaryStyle !== 'Custom Neon Forge' ? primaryStyle : 'Custom Neon Forge';
+  let header = safePrimaryStyle !== 'Custom Neon Forge' ? safePrimaryStyle : 'Custom Neon Forge';
   const identityText = identity.filter(Boolean).join(', ');
   if (identityText) header += ' — ' + identityText;
   if (bpmVal) header += ` [${bpmVal}]`;
-  if (blendStyle) header += ` + ${blendStyle} influence`;
+  if (blendStyle) header += ` + ${sanitizeMaximumText(blendStyle)} influence`;
   lines.push('STYLE: ' + header + '.');
   if (styleTag) lines.push('SIGNATURE: ' + styleTag + '.');
 
@@ -1531,7 +1578,7 @@ function buildFullPrompt() {
   ]);
   const detailLines = Object.values(state)
     .filter(field => field.enabled && !usedCats.has(field.category))
-    .map(field => `• ${field.category} / ${field.name}: ${field.value}`);
+    .map(field => `• ${field.category} / ${sanitizeMaximumText(field.name)}: ${sanitizeMaximumText(field.value)}`);
   if (detailLines.length) {
     lines.push('DETAILS:');
     detailLines.slice(0, 42).forEach(line => lines.push(line));
@@ -1608,14 +1655,15 @@ function updateStats() {
 // ═══════════════════════════════════════════════════════════
 
 function pickField(field) {
-  if (melodyIntensity === 'std' || !field) return pick(field ? field.opts : ['techno']);
+  if (!field) return 'maximum full-force techno';
+  const options = maximumOptions(field.opts);
   const melodyCats = ['Emotional palette', 'Melody & harmony', 'Melodic Architecture', 'Synth palette', 'Acid laboratory', 'Bass & low end'];
-  const isMelody = melodyCats.includes(field.category) || /melod|lead|hook|arpegg|harmon|chord|register|interval|articulation|emotion|feeling|release|arc/.test(field.name);
-  if (!isMelody) return pick(field.opts);
-  const mel = field.opts.filter(value => /melod|lead|hook|arpegg|harmon|chord|emotion|eupho|uplift|melo|sing|vocal|nostalg|beautiful|haunt|cinematic|dream|soaring|joy|happy|hope|cathart|feeling|release|heart|tender|romantic/i.test(value));
-  if (mel.length === 0) return pick(field.opts);
+  const isMelody = melodyCats.includes(field.category) || /melod|lead|hook|arpegg|harmon|chord|register|interval|articulation|emotion|feeling|release|arc|contour|tension|peak|afterglow|temperature|motion/.test(field.name);
+  if (melodyIntensity === 'std' || !isMelody) return pickMaximumOption(options);
+  const mel = options.filter(value => /melod|lead|hook|arpegg|harmon|chord|emotion|eupho|uplift|melo|sing|vocal|nostalg|beautiful|haunt|cinematic|dream|soaring|joy|happy|hope|cathart|feeling|release|heart|tender|romantic|ecstatic|aggressive|triumph/i.test(value));
+  if (mel.length === 0) return pickMaximumOption(options);
   const probability = melodyIntensity === 'focus' ? 0.45 : melodyIntensity === 'drive' ? 0.65 : 0.82;
-  return Math.random() < probability ? pick(mel) : pick(field.opts);
+  return Math.random() < probability ? pickMaximumOption(mel) : pickMaximumOption(options);
 }
 
 function randomizeAll() {
@@ -1747,7 +1795,7 @@ function loadPreset(preset) {
 
   Object.entries(preset.state).forEach(([key, data]) => {
     if (state[key]) {
-      state[key].value = data.value;
+      state[key].value = containsMinimumLanguage(data.value) ? pickMaximumOption(state[key].opts) : data.value;
       state[key].locked = data.locked;
       state[key].enabled = data.enabled;
     } else if (data.isCustom) {
@@ -1756,8 +1804,8 @@ function loadPreset(preset) {
         key,
         category: '⚡ Custom',
         name: key.split('|')[1],
-        opts: data.opts || [data.value],
-        value: data.value,
+        opts: maximumOptions(data.opts || [data.value]),
+        value: containsMinimumLanguage(data.value) ? pickMaximumOption(data.opts || [data.value]) : data.value,
         locked: data.locked,
         enabled: data.enabled,
         isCustom: true,
@@ -1772,6 +1820,7 @@ function loadPreset(preset) {
   if (preset.melodyAlways !== undefined) melodyAlways = preset.melodyAlways;
   if (preset.melodyIntensity) melodyIntensity = preset.melodyIntensity;
   if (preset.currentView) currentView = preset.currentView;
+  normalizeMaximumStyles();
   promptEdited = false;
 
   currentPresetName = preset.name;
@@ -2023,7 +2072,8 @@ function addCustomField() {
 
   // Parse extra options
   const extraOpts = modalOptionsInput.value.split('\n').map(s => s.trim()).filter(Boolean);
-  const opts = [value, ...extraOpts];
+  const opts = maximumOptions([value, ...extraOpts]);
+  const safeValue = containsMinimumLanguage(value) ? pickMaximumOption(opts) : value;
 
   const id = nextCustomId++;
   const key = makeKey('⚡ Custom', name + '#' + id);
@@ -2032,7 +2082,7 @@ function addCustomField() {
     category: '⚡ Custom',
     name,
     opts,
-    value,
+    value: safeValue,
     locked: false,
     enabled: true,
     isCustom: true,
@@ -2505,7 +2555,7 @@ function applyShared() {
     Object.entries(data.f).forEach(([k, raw]) => {
       const arr = Array.isArray(raw) ? raw : [raw?.value ?? raw?.v, raw?.locked ?? raw?.l, raw?.enabled ?? raw?.e, raw?.custom];
       if (state[k]) {
-        state[k].value = arr[0];
+        state[k].value = containsMinimumLanguage(arr[0]) ? pickMaximumOption(state[k].opts) : arr[0];
         state[k].locked = !!arr[1];
         state[k].enabled = arr[2] !== false;
       } else if (arr[3] && arr[3].name) {
@@ -2513,8 +2563,8 @@ function applyShared() {
           key: k,
           category: '⚡ Custom',
           name: arr[3].name,
-          opts: arr[3].opts || [arr[0]],
-          value: arr[0],
+          opts: maximumOptions(arr[3].opts || [arr[0]]),
+          value: containsMinimumLanguage(arr[0]) ? pickMaximumOption(arr[3].opts || [arr[0]]) : arr[0],
           locked: !!arr[1],
           enabled: arr[2] !== false,
           isCustom: true,
@@ -2530,6 +2580,7 @@ function applyShared() {
     if (data.m !== undefined) melodyAlways = data.m;
     if (data.mi) melodyIntensity = data.mi;
     if (data.c) currentView = data.c;
+    normalizeMaximumStyles();
     promptEdited = false;
     toast('🔗 Shared setup loaded');
   } catch (e) {
