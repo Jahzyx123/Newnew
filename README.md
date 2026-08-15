@@ -1,6 +1,8 @@
 # NEON FORGE — Suno Techno Prompt Lab 🎛️
 
-Generate hyper-detailed **techno prompts for [Suno.com](https://suno.com)** with massive randomization, per-parameter locks, add/remove toggles, a **live beat preview**, **batch generator**, **presets**, **prompt history**, **share links**, **Suno structure tags** and **melody intensity control**.
+**v3 · Emotion-linked melody randomizer**
+
+Generate hyper-detailed **techno prompts for [Suno.com](https://suno.com)** with a giant parameter matrix, emotion-linked melody rolls, per-parameter locks, add/remove toggles, a **live beat preview**, **batch generator**, **presets**, **prompt history**, **share links**, **Suno structure tags** and **melody intensity control**.
 
 ## ▶ Run it
 
@@ -12,6 +14,17 @@ Generate hyper-detailed **techno prompts for [Suno.com](https://suno.com)** with
 
 ### 🎧 Live Beat Preview
 Press **▶ Play beat** and hear a synthesized techno beat respond *live* to your current BPM, kick type, hats, snare, swing, key/mode, tribal percussion, bassline and acid line. Includes a spectrum visualizer.
+
+### ⚡ Maximum mode (always on)
+The randomizer removes options containing minimal/minimalist language, removes minimal style presets from the selector, and strongly favors huge, massive, aggressive, explosive, euphoric, relentless, and peak-time choices. Older presets and shared links are sanitized too, so generated prompts stay full-force.
+
+### 🎭 Emotion → Melody deck (new!)
+The dedicated emotion deck rolls a large emotional palette — from **happy**, euphoric, tender and nostalgic to **aggressive**, feral, anxious and cathartic — then writes the feeling into the melody, harmony, hook behavior, performance and release. Use:
+- **🎭 Roll emotion** — rerolls only unlocked emotional axes.
+- **🎼 Roll melody** — rerolls unlocked melody, harmony, synth and emotional hook axes.
+- **🔒 Lock feeling** — freezes or unfreezes the complete emotional palette.
+
+The generated output includes a clean `Emotion:` line so Suno has an explicit emotional direction instead of disconnected adjectives.
 
 ### 🎵 Melody Intensity (new!)
 A 4-level selector under the style deck: **Standard → Focused → Driven → Pure Melody**
@@ -37,14 +50,18 @@ A collapsible panel in the prompt output section with common Suno tags like `[Bu
 Click **🔗 Share** to copy a URL that re-opens the tool with the exact same parameters, locks, toggles and settings.
 
 ### Other features
-- **140+ parameters** across 34+ categories, each with dozens→hundreds of options
+- **170+ parameters** across 37+ categories and **11,000+ maximum-energy roll choices**, each with dozens→hundreds of options (including 24 dedicated emotional axes)
 - **90+ preset techno styles** with fusion blending
 - **Lock/unlock** individual values or whole categories
 - **👁 Toggle** any parameter or category on/off in the prompt
 - **+ Add custom parameter** — create your own fields with custom random options
 - **💾 Presets** — save/load/delete full configurations
 - **📜 History** — last 6 prompts auto-saved on copy/export
+- **🔒 Lock all / ♢ Unlock all** — freeze the whole matrix or free it again
 - **⚄ Surprise me** — randomize everything including locks and toggles
+- **🎭 Roll emotion / 🎼 Roll melody** — focused random buttons for happy, aggressive, euphoric, melancholic and many more emotional colors
+- **⚡ Maximum mode** — minimal options are removed and high-impact choices are favored on every roll
+- **Balanced 1000-character style sampler** — after core melody/bass/drums, randomized details are selected across the whole matrix so lower categories do not vanish below the fold
 - **Two prompt outputs** (Style ~1000 chars + Full Brief ~3000 chars)
 - **Editable** prompt with live character counter and warning bar
 - **Search/filter** parameters, **export .txt**, sparkle FX, fully responsive
@@ -58,12 +75,14 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 | `🎲 Batch 3` | Generate 3 variations, pick the best one |
 | `🏷️ Structure tags` | Click to insert Suno tags at cursor |
 | `↺ Reset main` / `✕ Clear blend` | Reset style selections |
-| `○` / `●` (on a field) | Lock / unlock that value |
+| `🔓` / `🔒` (on a field) | Lock / unlock that value |
 | `👁` / `👁‍🗨` (on a field) | Include / exclude from the prompt |
 | `↻` (on a category) | Reroll all unlocked values in that category |
-| `👁` / `○` (on a category head) | Toggle / lock the whole category |
+| `👁` / `🔓` (on a category head) | Toggle / lock the whole category |
 | `+ Add custom parameter` | Create your own field with custom random options |
+| `🔒 Lock all` / `♢ Unlock all` | Freeze or free every parameter |
 | `⚄ Surprise me` | Full random roll — values, locks and visibility |
+| `🎭 Roll emotion` / `🎼 Roll melody` | Focused emotional and melodic random rolls |
 | `🔗 Share` | Copy a link that restores this exact setup |
 
 *Made for techno producers who love happy accidents.*
