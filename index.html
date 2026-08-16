@@ -94,6 +94,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
 .cat-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .cat-num{font:10px 'DM Mono';color:var(--aqua);width:18px;opacity:.7}
 .cat h3{font-size:13px;margin:0;letter-spacing:-.01em;flex:1;font-weight:600}
+.cat[data-optional="true"] h3:after{content:'OPTIONAL · OFF';font:8px 'DM Mono';letter-spacing:.08em;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:2px 4px;margin-left:7px;vertical-align:2px;opacity:.75}
 .cat-toggle-btn{background:none;border:0;color:var(--muted);cursor:pointer;padding:2px 4px;font-size:13px;transition:var(--transition);border-radius:4px}
 .cat-toggle-btn:hover{color:var(--lime);background:rgba(255,255,255,.05)}
 .cat-toggle-btn.off{opacity:.4}
@@ -308,7 +309,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <div class="eyebrow">Feeling → melody</div>
       <h3 id="emotionDeckTitle">Give the machine a heart</h3>
       <p>Roll an emotional palette and the prompt will connect the feeling to the hook, harmony, performance, and release.</p>
-      <span class="emotion-axis-count">24 emotional axes · maximum feeling · unlocked values reroll</span>
+      <span class="emotion-axis-count">24 emotional axes · cue always on · detail axes off by default</span>
     </div>
     <div class="emotion-readout" aria-live="polite">
       <div class="emotion-label">Current emotional signal</div>
@@ -316,7 +317,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <div class="emotion-sub"><span id="emotionBlend">emotion blend</span><span id="emotionMelody">melodic feeling</span><span id="emotionArc">emotional arc</span></div>
     </div>
     <div class="emotion-actions">
-      <button class="btn emotion-roll" id="emotionRollBtn">🎭 Roll emotion</button>
+      <button class="btn emotion-roll" id="emotionRollBtn">🎭 Roll feeling → melody</button>
       <button class="btn" id="melodyRollBtn">🎼 Roll melody</button>
       <button class="btn" id="lockEmotionBtn">🔒 Lock feeling</button>
     </div>
@@ -362,7 +363,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
     <!-- LEFT: CATEGORIES -->
     <section class="panel">
       <div class="controls">
-        <span class="label">PARAMETER MATRIX · MAXIMUM ENERGY · LOCKED VALUES STAY · TOGGLE ANY OFF</span>
+        <span class="label">PARAMETER MATRIX · MAXIMUM ENERGY · OPTIONAL LAYERS START OFF · LOCKED VALUES STAY</span>
         <input class="search-input" id="searchInput" placeholder="🔍 Filter…" />
         <button class="btn sm" id="surpriseBtn">⚄ Surprise me</button>
         <button class="btn sm" id="drumsBtn" title="Randomize only drum/beat parameters — kick, hats, snare, percussion">🥁 Drums only</button>
@@ -384,7 +385,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <div class="prompt-head">
         <div class="eyebrow">Suno-ready output</div>
         <h3>Your sonic blueprint</h3>
-        <p>Editable. Switch between short style, full brief, or copy a complete Suno kit.</p>
+        <p>Editable. Deep layers start off — click a category eye to add them. Switch between short style, full brief, or copy a complete Suno kit.</p>
         <div class="prompt-tabs">
           <button class="prompt-tab active" data-view="style">🎯 Style prompt</button>
           <button class="prompt-tab" data-view="full">📜 Full brief</button>
@@ -972,6 +973,97 @@ const CATEGORIES_RAW = {
   }
 };
 
+// ─── CONCEPT ENGINE ───
+// Every musical category gets its own concept lane so a roll changes the world,
+// not only the adjective. Optional categories remain off until the user enables them.
+const CONCEPT_VARIATIONS = [
+  'maximum neon storm over a flooded megacity',
+  'aggressive machines waking beneath a stadium-sized warehouse',
+  'massive rave inside a collapsing space elevator',
+  'euphoric escape from a locked underground city',
+  'ferocious dancefloor ritual on a volcanic moon',
+  'heroic resistance broadcast through broken satellites',
+  'dark chrome palace powered by a runaway reactor',
+  'cathartic sunrise after a night of machine warfare',
+  'gigantic sound system hidden in an abandoned airport',
+  'relentless convoy crossing a red desert at midnight',
+  'beautiful alien signal turning panic into celebration',
+  'high-voltage carnival for synthetic creatures',
+  'crushing industrial cathedral opening its doors at 3 AM',
+  'electric jungle where every tree pulses with bass',
+  'euphoric memory reconstructed by a damaged AI',
+  'massive underwater rave beneath an ice shelf',
+  'aggressive street parade through a cyberpunk blackout',
+  'maximum-pressure launch sequence into deep space',
+  'ancient ritual upgraded by impossible modular technology',
+  'heroic last party before the sun becomes a red giant',
+  'feral free-party camp hidden beyond the city limits',
+  'chrome gladiators competing for the final melodic key',
+  'volcanic heartbeat beneath a frozen digital landscape',
+  'overwhelming crowd energy inside a zero-gravity arena',
+  'beautiful rebellion led by one unforgettable synth hook',
+  'massive thunderstorm trapped inside a concrete bunker',
+  'relentless night drive toward a city made of light',
+  'aggressive signal hijack that becomes a joyful anthem',
+  'euphoric machine garden growing through abandoned factories',
+  'high-speed chase through a tunnel of repeating memories',
+  'dark ocean pressure breaking open into a radiant climax',
+  'maximum intensity ceremony for a newly born artificial mind',
+  'heroic radio transmission reaching a lost generation',
+  'gigantic mirrored room where every kick creates another world',
+  'ferocious moonbase celebration with no gravity and no rules',
+  'cathartic escape through a city-wide power surge',
+  'aggressive metallic insects building a dancefloor cathedral',
+  'euphoric lovers finding each other inside a data storm',
+  'massive red warning light becoming a beautiful melody',
+  'relentless ascent through an endless neon tower',
+  'powerful heartbeat of a sleeping planetary engine',
+  'dark carnival run by ghosts with perfect rhythmic memory',
+  'maximum-force weather system forming around the bassline',
+  'heroic future tribe moving as one organism',
+  'crushing factory floor transformed into a sacred rave',
+  'bright cosmic highway with an aggressive overtaking lane',
+  'overwhelming dream that refuses to fade after sunrise',
+  'feral jungle transmission colliding with cold machinery',
+  'euphoric rescue mission guided by a singing oscillator',
+  'massive hidden room behind the final warehouse wall',
+  'violent stars exploding into a triumphant chord progression',
+  'high-voltage underground train carrying the last dancers',
+  'beautifully broken robot learning how to celebrate',
+  'relentless ocean of bodies under ultraviolet weather',
+  'maximum-size memory palace built from distorted drums',
+  'aggressive neon wolves running through a satellite city',
+  'heroic ascent from subterranean darkness into white light',
+  'cathartic thunder rolling across a synthetic desert',
+  'gigantic clockwork heart keeping an impossible tempo',
+  'euphoric rebellion inside a museum of dead machines',
+  'crushing pressure wave opening a portal to another club',
+  'dark royal procession powered by sub-bass and sirens',
+  'ferocious dawn ceremony for people who survived the night',
+  'massive holographic ocean swallowing the old world',
+  'high-speed emotional transmission between two distant moons',
+  'aggressive dream logic with a clear dancefloor purpose',
+  'beautiful final message hidden inside a distorted hook',
+  'maximum-energy festival at the edge of a black hole',
+  'relentless industrial pilgrimage toward a glowing horizon',
+  'heroic choir of machines answering a lonely lead',
+  'euphoric storm of color, pressure, and physical movement',
+  'crushing old memories into a new future-facing anthem',
+  'massive secret broadcast heard by every underground system',
+  'feral celebration in a city with no clocks',
+  'dark cinematic pursuit ending in a radiant final drop',
+  'powerful concept of human warmth inside a cold machine',
+  'aggressive laboratory accident that discovers a perfect groove',
+  'maximum-scale sunrise seen from a moving warehouse train',
+  'beautiful chaos arranged into a precise emotional weapon'
+];
+
+Object.entries(CATEGORIES_RAW).forEach(([category, categoryData]) => {
+  if (!['Emotional palette', 'Concept & visual world'].includes(category)) {
+    categoryData.fields['Concept / variation'] = CONCEPT_VARIATIONS.slice();
+  }
+});
+
 // ─── VARIATION PALETTES ───
 const VARIATION_PALETTES = {
   'Emotional palette':['with a melody that breathes like a human memory','with feeling that intensifies every 8 bars','with a hook designed to create emotional contrast','with harmonic movement that mirrors the feeling','with a release that feels physical and earned','with small human imperfections in the performance','with the melody acting as the emotional narrator','with the final motif changing the meaning of the beginning','with tension and tenderness sharing the same groove','with a dancefloor-ready form of catharsis','with the emotional color evolving from shadow to light','with a memorable melodic fingerprint'],
@@ -1053,6 +1145,14 @@ let currentPresetName = null;
 const STYLE_LIMIT = 1000;
 const FULL_LIMIT = 3000;
 
+const DEFAULT_DISABLED_CATEGORIES = new Set([
+  'Texture & atmosphere', 'FX & transitions', 'Mix & production', 'Experimental & organic', 'Acid laboratory',
+  'Rhythm architecture', 'Groove & movement', 'Modulation system', 'Oscillator & filter DNA', 'Tonal color',
+  'Space & psychoacoustics', 'Reverb laboratory', 'Delay laboratory', 'Vocal design', 'Organic mutation',
+  'Glitch engine', 'Micro-variation matrix', 'DJ utility', 'Emotional palette', 'Concept & visual world',
+  'Tuning & musical physics', 'Performance & automation', 'Sub-techno DNA', 'Sequencing intelligence', 'Final restraint'
+]);
+
 function makeKey(cat, name) {
   return cat + '|' + name;
 }
@@ -1074,7 +1174,7 @@ function initState() {
         opts: opts.slice(),
         value: pickMaximumOption(opts),
         locked: false,
-        enabled: true,
+        enabled: !DEFAULT_DISABLED_CATEGORIES.has(cat),
         isCustom: false
       };
     });
@@ -1275,6 +1375,7 @@ function render() {
     const div = document.createElement('section');
     div.className = 'cat' + (anyEnabled ? '' : ' disabled');
     div.dataset.category = cat;
+    if (DEFAULT_DISABLED_CATEGORIES.has(cat)) div.dataset.optional = 'true';
 
     const head = document.createElement('div');
     head.className = 'cat-head';
@@ -1286,6 +1387,7 @@ function render() {
 
     const h3 = document.createElement('h3');
     h3.textContent = cat;
+    h3.title = DEFAULT_DISABLED_CATEGORIES.has(cat) ? 'Optional detail — click the eye to add this category to the prompt' : cat;
     head.appendChild(h3);
 
     // Category toggle all
@@ -1436,6 +1538,11 @@ function getVal(cat, name) {
   return field && field.enabled ? sanitizeMaximumText(field.value) : '';
 }
 
+function getRawVal(cat, name) {
+  const field = state[makeKey(cat, name)];
+  return field ? sanitizeMaximumText(field.value) : '';
+}
+
 function buildPrompt() {
   return currentView === 'style' ? buildStylePrompt() : buildFullPrompt();
 }
@@ -1449,12 +1556,23 @@ function clipPromptText(value, maxLength) {
 }
 
 function buildEmotionLine(compact = false) {
-  const allItems = [
-    ['feeling', getVal('Emotional palette', 'Feeling')],
-    ['blend', getVal('Emotional palette', 'Emotion blend')],
+  const cueItems = [
+    ['feeling', getRawVal('Emotional palette', 'Feeling')],
+    ['blend', getRawVal('Emotional palette', 'Emotion blend')],
+    ['melody', getRawVal('Emotional palette', 'Melodic feeling')]
+  ].filter(([, value]) => value);
+  if (compact) {
+    if (!cueItems.length) return '';
+    const cue = Object.fromEntries(cueItems);
+    const feeling = clipPromptText(cue.feeling || 'maximum', 38);
+    const blend = clipPromptText(cue.blend || 'full-force and emotionally alive', 54);
+    const melody = clipPromptText(cue.melody || 'a memorable rising hook', 72);
+    return clipPromptText(`Emotion-led melody: ${feeling} melody; ${blend}; direction ${melody}.`, 205);
+  }
+
+  const detailItems = [
     ['intensity', getVal('Emotional palette', 'Intensity')],
     ['arc', getVal('Emotional palette', 'Emotional arc')],
-    ['melody', getVal('Emotional palette', 'Melodic feeling')],
     ['harmony', getVal('Emotional palette', 'Harmonic color')],
     ['tone', getVal('Emotional palette', 'Emotional color')],
     ['trigger', getVal('Emotional palette', 'Emotional trigger')],
@@ -1468,12 +1586,9 @@ function buildEmotionLine(compact = false) {
     ['motion', getVal('Emotional palette', 'Emotional motion')],
     ['hook', getVal('Emotional palette', 'Hook behavior')],
     ['release', getVal('Emotional palette', 'Release / catharsis')]
-  ];
-  const compactLabels = ['feeling', 'blend', 'melody', 'tone', 'contour', 'peak', 'afterglow'];
-  const items = (compact ? allItems.filter(([label]) => compactLabels.includes(label)) : allItems)
-    .filter(([, value]) => value);
-  const maxLength = compact ? 205 : 455;
-  return items.length ? clipPromptText('Emotion: ' + items.map(([label, value]) => `${label} ${value}`).join('; ') + '.', maxLength) : '';
+  ].filter(([, value]) => value);
+  const items = cueItems.concat(detailItems);
+  return items.length ? clipPromptText('Emotion: ' + items.map(([label, value]) => `${label} ${value}`).join('; ') + '.', 455) : '';
 }
 
 function buildEmotionNuanceLine(compact = false) {
@@ -1598,24 +1713,28 @@ function buildStylePrompt() {
   const mood = getVal('Core identity', 'Mood');
   const energy = getVal('Core identity', 'Energy');
   const genre = getVal('Core identity', 'Genre / subgenre');
-  let opening = [safePrimaryStyle !== 'Custom Neon Forge' ? safePrimaryStyle : '', mood, energy, genre].filter(Boolean).join(' — ');
+  let opening = [safePrimaryStyle !== 'Custom Neon Forge' ? safePrimaryStyle : '', mood, energy, genre, getVal('Core identity', 'Concept / variation')].filter(Boolean).join(' — ');
   if (bpmVal) opening += (opening ? ' ' : '') + `at ${bpmVal}`;
   if (styleTag) opening += `; ${styleTag}`;
   appendPart(opening + '.', 145);
   if (blendStyle) appendPart('Fusion: ' + sanitizeMaximumText(blendStyle) + '.', 78);
+  // Give Suno the feeling before the technical melody recipe.
+  appendPart(buildEmotionLine(true), 205);
 
   const melody = [
     getVal('Melody & harmony', 'Key / mode'),
     getVal('Melody & harmony', 'Lead'),
     getVal('Melody & harmony', 'Harmony'),
-    getVal('Melodic Architecture', 'Melodic register')
+    getVal('Melodic Architecture', 'Melodic register'),
+    getVal('Melody & harmony', 'Concept / variation')
   ].filter(Boolean);
   if (melody.length) appendPart('Melody: ' + melody.join('; ') + '.', 115);
 
   const bass = [
     getVal('Bass & low end', 'Bass voice'),
     getVal('Bass & low end', 'Movement'),
-    getVal('Bass & low end', 'Bass-melody relationship')
+    getVal('Bass & low end', 'Bass-melody relationship'),
+    getVal('Bass & low end', 'Concept / variation')
   ].filter(Boolean);
   if (bass.length) appendPart('Bass: ' + bass.join('; ') + '.', 78);
 
@@ -1623,12 +1742,12 @@ function buildStylePrompt() {
     getVal('Drum architecture', 'Kick'),
     getVal('Drum architecture', 'Hats'),
     getVal('Drum architecture', 'Snare / clap'),
-    getVal('Drum architecture', 'Percussion')
+    getVal('Drum architecture', 'Percussion'),
+    getVal('Drum architecture', 'Concept / variation')
   ].filter(Boolean);
   if (drums.length) appendPart('Drums: ' + drums.join('; ') + '.', 105);
 
-  // Emotion gets priority over optional production adjectives, so the feeling never disappears at the cap.
-  appendPart(buildEmotionLine(true), 205);
+  // Emotion is already placed before the melody section above.
   if (melodyAlways || melodyIntensity !== 'std') {
     const melodyRule = {
       focus: 'Warm emotional lead present throughout; evolving motif and layered arpeggiated harmony.',
@@ -1681,11 +1800,11 @@ function buildFullPrompt() {
   const emotionNuanceLine = buildEmotionNuanceLine();
   if (emotionNuanceLine) lines.push(emotionNuanceLine);
 
-  pushLine('WORLD', [getVal('Core identity', 'Main aesthetic'), getVal('Texture & atmosphere', 'World'), getVal('Texture & atmosphere', 'Surface')], ' — ');
+  pushLine('WORLD', [getVal('Core identity', 'Main aesthetic'), getVal('Core identity', 'Concept / variation'), getVal('Texture & atmosphere', 'World'), getVal('Texture & atmosphere', 'Surface')], ' — ');
   pushLine('RHYTHM', [getVal('Tempo & timing', 'Rhythm feel'), getVal('Tempo & timing', 'Timing'), getVal('Tempo & timing', 'Syncopation')], ', ');
-  pushLine('DRUMS', [getVal('Drum architecture', 'Kick'), getVal('Drum architecture', 'Hats'), getVal('Drum architecture', 'Snare / clap'), getVal('Drum architecture', 'Percussion')]);
-  pushLine('BASS', [getVal('Bass & low end', 'Bass voice'), getVal('Bass & low end', 'Movement'), getVal('Bass & low end', 'Kick relationship'), getVal('Bass & low end', 'Bass-melody relationship')]);
-  pushLine('MUSIC', [getVal('Melody & harmony', 'Key / mode'), getVal('Melody & harmony', 'Lead'), getVal('Melody & harmony', 'Harmony'), getVal('Melody & harmony', 'Melody layering'), getVal('Melody & harmony', 'Motion')]);
+  pushLine('DRUMS', [getVal('Drum architecture', 'Kick'), getVal('Drum architecture', 'Hats'), getVal('Drum architecture', 'Snare / clap'), getVal('Drum architecture', 'Percussion'), getVal('Drum architecture', 'Concept / variation')]);
+  pushLine('BASS', [getVal('Bass & low end', 'Bass voice'), getVal('Bass & low end', 'Movement'), getVal('Bass & low end', 'Kick relationship'), getVal('Bass & low end', 'Bass-melody relationship'), getVal('Bass & low end', 'Concept / variation')]);
+  pushLine('MUSIC', [getVal('Melody & harmony', 'Key / mode'), getVal('Melody & harmony', 'Lead'), getVal('Melody & harmony', 'Harmony'), getVal('Melody & harmony', 'Melody layering'), getVal('Melody & harmony', 'Motion'), getVal('Melody & harmony', 'Concept / variation')]);
   pushLine('MELODIC ARCHITECTURE', [getVal('Melodic Architecture', 'Melodic register'), getVal('Melodic Architecture', 'Interval character'), getVal('Melodic Architecture', 'Melodic density'), getVal('Melodic Architecture', 'Articulation'), getVal('Melodic Architecture', 'Counterpoint')]);
   pushLine('SYNTHS', [getVal('Synth palette', 'Lead synth'), getVal('Synth palette', 'Pad / texture'), getVal('Synth palette', 'Sequence'), getVal('Synth palette', 'Sound design')]);
   pushLine('SCENE', [getVal('Sub-techno DNA', 'Scene flavor'), getVal('Sub-techno DNA', 'Era code'), getVal('Sub-techno DNA', 'Hybrid edge'), getVal('Sub-techno DNA', 'Set position')]);
@@ -1730,10 +1849,10 @@ function updateEmotionDeck() {
   const melody = document.getElementById('emotionMelody');
   const arc = document.getElementById('emotionArc');
   if (!feeling) return;
-  feeling.textContent = getVal('Emotional palette', 'Feeling') || 'Roll a feeling';
-  blend.textContent = getVal('Emotional palette', 'Emotion blend') || 'emotion blend';
-  melody.textContent = getVal('Emotional palette', 'Melodic feeling') || 'melodic feeling';
-  arc.textContent = getVal('Emotional palette', 'Emotional arc') || 'emotional arc';
+  feeling.textContent = getRawVal('Emotional palette', 'Feeling') || 'Roll a feeling';
+  blend.textContent = getRawVal('Emotional palette', 'Emotion blend') || 'emotion blend';
+  melody.textContent = getRawVal('Emotional palette', 'Melodic feeling') || 'melodic feeling';
+  arc.textContent = getRawVal('Emotional palette', 'Emotional arc') || 'emotional arc';
   const emotionFields = Object.values(state).filter(field => field.category === 'Emotional palette');
   const allLocked = emotionFields.length > 0 && emotionFields.every(field => field.locked);
   const button = document.getElementById('lockEmotionBtn');
@@ -1826,25 +1945,29 @@ function surprise() {
   Object.values(state).forEach(field => {
     field.value = pickField(field);
     field.locked = Math.random() < 0.2;
-    field.enabled = Math.random() < 0.85;
+    field.enabled = DEFAULT_DISABLED_CATEGORIES.has(field.category) ? false : Math.random() < 0.85;
   });
   promptEdited = false;
   render();
-  toast('⚄ Surprise! Values, locks, and visibility all rolled');
+  toast('⚄ Surprise! Values, locks, and core visibility rolled — optional layers stay off');
 }
 
 function rollEmotion() {
   rememberForgeAction();
+  const cueNames = new Set(['Feeling', 'Emotion blend', 'Melodic feeling']);
+  const melodyCats = new Set(['Melody & harmony', 'Melodic Architecture', 'Synth palette']);
   let changed = 0;
   Object.values(state).forEach(field => {
-    if (field.category === 'Emotional palette' && field.enabled && !field.locked) {
+    const isCue = field.category === 'Emotional palette' && cueNames.has(field.name);
+    const isMelody = melodyCats.has(field.category);
+    if ((isCue || isMelody) && !field.locked && (isCue || field.enabled)) {
       field.value = pickField(field);
       changed++;
     }
   });
   promptEdited = false;
   render();
-  toast(changed ? '🎭 New emotional palette linked to the melody' : '🔒 Emotional palette is locked');
+  toast(changed ? '🎭 Feeling → melody rolled together' : '🔒 Feeling or melody fields are locked');
 }
 
 function rollMelody() {
@@ -1853,7 +1976,8 @@ function rollMelody() {
   let changed = 0;
   Object.values(state).forEach(field => {
     const emotionalMelodyField = field.category === 'Emotional palette' && /Melodic|Harmonic|Hook|Release|Contrast|Emotional detail|Color|Contour|Tension|Peak|Afterglow|Temperature|Motion/i.test(field.name);
-    if ((melodyCats.has(field.category) && (field.category !== 'Emotional palette' || emotionalMelodyField)) && field.enabled && !field.locked) {
+    const canRoll = field.category === 'Emotional palette' ? true : field.enabled;
+    if ((melodyCats.has(field.category) && (field.category !== 'Emotional palette' || emotionalMelodyField)) && canRoll && !field.locked) {
       field.value = pickField(field);
       changed++;
     }
@@ -1915,6 +2039,7 @@ function saveCurrentPreset() {
     };
   });
   const preset = {
+    v: 4,
     name,
     state: data,
     includeBpm,
@@ -1944,11 +2069,12 @@ function loadPreset(preset) {
     if (state[k].isCustom) delete state[k];
   });
 
+  const legacyOptionalPreset = (preset.v || 0) < 4;
   Object.entries(preset.state).forEach(([key, data]) => {
     if (state[key]) {
       state[key].value = containsMinimumLanguage(data.value) ? pickMaximumOption(state[key].opts) : data.value;
       state[key].locked = data.locked;
-      state[key].enabled = data.enabled;
+      state[key].enabled = legacyOptionalPreset && DEFAULT_DISABLED_CATEGORIES.has(state[key].category) ? false : data.enabled;
     } else if (data.isCustom) {
       // Recreate custom field
       state[key] = {
@@ -2737,7 +2863,7 @@ function saveToHistory(silent, textOverride) {
 
 function shareLink() {
   const data = {
-    v: 3, s: primaryStyle, b: blendStyle, i: includeBpm, m: melodyAlways, mi: melodyIntensity, c: currentView,
+    v: 4, s: primaryStyle, b: blendStyle, i: includeBpm, m: melodyAlways, mi: melodyIntensity, c: currentView,
     f: {}
   };
   Object.values(state).forEach(f => {
@@ -2764,12 +2890,13 @@ function applyShared() {
   try {
     const data = JSON.parse(decodeURIComponent(escape(atob(h))));
     if (!data || !data.f) return;
+    const legacyOptionalShare = (data.v || 0) < 4;
     Object.entries(data.f).forEach(([k, raw]) => {
       const arr = Array.isArray(raw) ? raw : [raw?.value ?? raw?.v, raw?.locked ?? raw?.l, raw?.enabled ?? raw?.e, raw?.custom];
       if (state[k]) {
         state[k].value = containsMinimumLanguage(arr[0]) ? pickMaximumOption(state[k].opts) : arr[0];
         state[k].locked = !!arr[1];
-        state[k].enabled = arr[2] !== false;
+        state[k].enabled = legacyOptionalShare && DEFAULT_DISABLED_CATEGORIES.has(state[k].category) ? false : arr[2] !== false;
       } else if (arr[3] && arr[3].name) {
         state[k] = {
           key: k,

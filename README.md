@@ -15,16 +15,21 @@ Generate hyper-detailed **techno prompts for [Suno.com](https://suno.com)** with
 ### 🎧 Live Beat Preview
 Press **▶ Play beat** and hear a synthesized techno beat respond *live* to your current BPM, kick type, hats, snare, swing, key/mode, tribal percussion, bassline and acid line. Includes a spectrum visualizer.
 
+### 🧩 Optional category layers (new!)
+Texture, FX, mix, acid, rhythm architecture, modulation, psychoacoustics, reverb, delay, vocals, glitch, concepts, tuning, performance, sequencing, restraint, and other deep-detail layers now start **off**. Click the category eye button to add one layer to the prompt. This keeps the core techno identity clean instead of forcing every roll into acid, glitch, or texture-heavy territory.
+
+Every category also has a large **Concept / variation** lane, so enabling a layer gives it many different worlds and narrative directions instead of repeating the same technical adjective.
+
 ### ⚡ Maximum mode (always on)
 The randomizer removes options containing minimal/minimalist language, removes minimal style presets from the selector, and strongly favors huge, massive, aggressive, explosive, euphoric, relentless, and peak-time choices. Older presets and shared links are sanitized too, so generated prompts stay full-force.
 
 ### 🎭 Emotion → Melody deck (new!)
 The dedicated emotion deck rolls a large emotional palette — from **happy**, euphoric, tender and nostalgic to **aggressive**, feral, anxious and cathartic — then writes the feeling into the melody, harmony, hook behavior, performance and release. Use:
-- **🎭 Roll emotion** — rerolls only unlocked emotional axes.
+- **🎭 Roll feeling → melody** — rolls a concise emotional cue and a fresh lead/harmony/synth direction together.
 - **🎼 Roll melody** — rerolls unlocked melody, harmony, synth and emotional hook axes.
 - **🔒 Lock feeling** — freezes or unfreezes the complete emotional palette.
 
-The generated output includes a clean `Emotion:` line so Suno has an explicit emotional direction instead of disconnected adjectives.
+The generated output includes a short `Emotion-led melody:` cue before the technical melody recipe. The feeling roll also rerolls the melody connection, so a happy, aggressive, euphoric, or cathartic feeling reaches Suno immediately. Detailed emotion axes stay optional until you enable that category.
 
 ### 🎵 Melody Intensity (new!)
 A 4-level selector under the style deck: **Standard → Focused → Driven → Pure Melody**
@@ -56,7 +61,7 @@ A collapsible panel in the prompt output section with common Suno tags like `[Bu
 Click **🔗 Share** to copy a URL that re-opens the tool with the exact same parameters, locks, toggles and settings.
 
 ### Other features
-- **170+ parameters** across 37+ categories and **11,000+ maximum-energy roll choices**, each with dozens→hundreds of options (including 24 dedicated emotional axes)
+- **200+ parameters** across 37+ categories and **16,000+ maximum-energy roll choices**, each with dozens→hundreds of options (including 24 dedicated emotional axes and concept lanes)
 - **90+ preset techno styles** with fusion blending
 - **Lock/unlock** individual values or whole categories
 - **👁 Toggle** any parameter or category on/off in the prompt
@@ -66,9 +71,11 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 - **⚡ Power roll** — forge a new style, fusion, BPM, emotion, melody, bass, and drum combination
 - **↶ Undo / ↷ Redo** — reverse major rolls, locks, toggles, presets, and custom-field edits
 - **🔒 Lock all / ♢ Unlock all** — freeze the whole matrix or free it again
-- **⚄ Surprise me** — randomize everything including locks and toggles
-- **🎭 Roll emotion / 🎼 Roll melody** — focused random buttons for happy, aggressive, euphoric, melancholic and many more emotional colors
+- **⚄ Surprise me** — randomize values, locks, and core visibility while optional layers remain off
+- **🎭 Roll feeling → melody / 🎼 Roll melody** — focused random buttons for happy, aggressive, euphoric, melancholic and many more emotional colors
 - **⚡ Maximum mode** — minimal options are removed and high-impact choices are favored on every roll
+- **🧩 Optional layers** — deep categories start off and are added only when you click their eye control
+- **💡 Concept lanes** — every core/detail category gets many narrative concepts to prevent repetitive rolls
 - **📦 Copy Suno kit** — copy Style + Full Brief + arrangement map + tags as one bundle
 - **Balanced 1000-character style sampler** — after core melody/bass/drums, randomized details are selected across the whole matrix so lower categories do not vanish below the fold
 - **Two prompt outputs** (Style ~1000 chars + Full Brief ~3000 chars)
@@ -93,8 +100,8 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 | `👁` / `🔓` (on a category head) | Toggle / lock the whole category |
 | `+ Add custom parameter` | Create your own field with custom random options |
 | `🔒 Lock all` / `♢ Unlock all` | Freeze or free every parameter |
-| `⚄ Surprise me` | Full random roll — values, locks and visibility |
-| `🎭 Roll emotion` / `🎼 Roll melody` | Focused emotional and melodic random rolls |
+| `⚄ Surprise me` | Full random roll — values, locks, and core visibility; optional layers stay off |
+| `🎭 Roll feeling → melody` / `🎼 Roll melody` | Roll a concise feeling into a fresh melodic direction |
 | `🔗 Share` | Copy a link that restores this exact setup |
 
 *Made for techno producers who love happy accidents.*
