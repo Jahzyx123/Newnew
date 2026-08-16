@@ -31,6 +31,10 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
 .btn.active{background:rgba(183,255,87,.12)!important;border-color:var(--lime)!important;color:var(--lime)!important}
 .btn.danger{color:var(--orange);border-color:rgba(255,139,85,.25)}
 .btn.danger:hover{border-color:var(--orange);color:var(--orange)}
+.btn.power{background:linear-gradient(110deg,#ff8b55,#ffcf57);border-color:#ffc078;color:#261309}
+.btn.power:hover{color:#261309;box-shadow:0 0 26px #ff8b5566}
+.btn.kit-btn{border-color:rgba(64,230,207,.34);color:var(--aqua)}
+.btn:disabled{opacity:.32;cursor:not-allowed;transform:none!important;filter:saturate(.25)}
 .btn.sm{padding:6px 9px;font-size:10px}
 /* ===== HERO ===== */
 .hero{display:flex;justify-content:space-between;gap:32px;padding:32px 0 22px;flex-wrap:wrap}
@@ -239,6 +243,9 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <button class="btn" id="lockAllBtn">🔒 Lock all</button>
       <button class="btn" id="unlockAllBtn">♢ Unlock all</button>
       <button class="btn" id="randomAllBtn">↻ Randomize all</button>
+      <button class="btn power" id="powerRollBtn">⚡ Power roll</button>
+      <button class="btn" id="undoBtn" disabled>↶ Undo</button>
+      <button class="btn" id="redoBtn" disabled>↷ Redo</button>
       <button class="btn" id="toggleAllBtn">◉ Toggle all</button>
       <button class="btn" id="bpmToggleBtn" aria-pressed="true">◉ BPM</button>
       <button class="btn primary" id="copyTopBtn">📋 Copy style</button>
@@ -377,7 +384,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
       <div class="prompt-head">
         <div class="eyebrow">Suno-ready output</div>
         <h3>Your sonic blueprint</h3>
-        <p>Editable. Switch between short style and full brief.</p>
+        <p>Editable. Switch between short style, full brief, or copy a complete Suno kit.</p>
         <div class="prompt-tabs">
           <button class="prompt-tab active" data-view="style">🎯 Style prompt</button>
           <button class="prompt-tab" data-view="full">📜 Full brief</button>
@@ -415,6 +422,7 @@ body{margin:0;background:radial-gradient(circle at 15% 0%,#16332d 0,transparent 
         <button class="btn" id="rebuildBtn">↻ Rebuild</button>
         <button class="btn" id="copyStyleBtn">📋 Copy style</button>
         <button class="btn" id="copyFullBtn">📋 Copy full brief</button>
+        <button class="btn kit-btn" id="copyKitBtn">📦 Copy Suno kit</button>
         <button class="btn" id="shareBtn">🔗 Share</button>
         <button class="btn" id="batchBtn">🎲 Batch 3</button>
         <button class="btn" id="exportBtn">⬇ Export .txt</button>
@@ -1114,6 +1122,118 @@ function saveCustomFields() {
 }
 
 // ═══════════════════════════════════════════════════════════
+//  FORGE HISTORY — undo/redo for rolls, locks, styles, and edits
+// ═══════════════════════════════════════════════════════════
+
+let undoStack = [];
+let redoStack = [];
+let historyBusy = false;
+const HISTORY_LIMIT = 24;
+
+function captureForge() {
+  const fields = {};
+  Object.entries(state).forEach(([key, field]) => {
+    fields[key] = {
+      value: field.value,
+      locked: field.locked,
+      enabled: field.enabled,
+      isCustom: field.isCustom,
+      customId: field.customId,
+      name: field.isCustom ? field.name : undefined,
+      opts: field.isCustom ? field.opts : undefined
+    };
+  });
+  return JSON.parse(JSON.stringify({
+    fields,
+    includeBpm,
+    primaryStyle,
+    blendStyle,
+    melodyAlways,
+    currentView,
+    melodyIntensity
+  }));
+}
+
+function syncHistoryButtons() {
+  const undo = document.getElementById('undoBtn');
+  const redo = document.getElementById('redoBtn');
+  if (undo) {
+    undo.disabled = undoStack.length === 0;
+    undo.title = undoStack.length ? `Undo ${undoStack.length} recent action${undoStack.length === 1 ? '' : 's'}` : 'Nothing to undo';
+  }
+  if (redo) {
+    redo.disabled = redoStack.length === 0;
+    redo.title = redoStack.length ? `Redo ${redoStack.length} recent action${redoStack.length === 1 ? '' : 's'}` : 'Nothing to redo';
+  }
+}
+
+function rememberForgeAction() {
+  if (historyBusy) return;
+  undoStack.push(captureForge());
+  if (undoStack.length > HISTORY_LIMIT) undoStack.shift();
+  redoStack = [];
+  syncHistoryButtons();
+}
+
+function restoreForge(snapshot) {
+  if (!snapshot) return;
+  historyBusy = true;
+  Object.keys(state).forEach(key => {
+    if (state[key].isCustom) delete state[key];
+  });
+  Object.entries(snapshot.fields || {}).forEach(([key, data]) => {
+    if (state[key]) {
+      state[key].value = containsMinimumLanguage(data.value) ? pickMaximumOption(state[key].opts) : data.value;
+      state[key].locked = !!data.locked;
+      state[key].enabled = data.enabled !== false;
+    } else if (data.isCustom) {
+      state[key] = {
+        key,
+        category: '⚡ Custom',
+        name: data.name || key.split('|')[1],
+        opts: maximumOptions(data.opts || [data.value]),
+        value: containsMinimumLanguage(data.value) ? pickMaximumOption(data.opts || [data.value]) : data.value,
+        locked: !!data.locked,
+        enabled: data.enabled !== false,
+        isCustom: true,
+        customId: data.customId
+      };
+    }
+  });
+  includeBpm = snapshot.includeBpm !== false;
+  primaryStyle = snapshot.primaryStyle || 'Custom Neon Forge';
+  blendStyle = snapshot.blendStyle || '';
+  melodyAlways = !!snapshot.melodyAlways;
+  currentView = snapshot.currentView || 'style';
+  melodyIntensity = snapshot.melodyIntensity || 'drive';
+  normalizeMaximumStyles();
+  promptEdited = false;
+  syncUI();
+  render();
+  saveCustomFields();
+  historyBusy = false;
+  syncHistoryButtons();
+}
+
+function undoForge() {
+  if (!undoStack.length) return;
+  const current = captureForge();
+  const previous = undoStack.pop();
+  redoStack.push(current);
+  restoreForge(previous);
+  toast('↶ Undid the last forge action');
+}
+
+function redoForge() {
+  if (!redoStack.length) return;
+  const current = captureForge();
+  const next = redoStack.pop();
+  undoStack.push(current);
+  restoreForge(next);
+  toast('↷ Redid the forge action');
+}
+
+// ═══════════════════════════════════════════════════════════
 //  DOM REFS
 // ═══════════════════════════════════════════════════════════
 
@@ -1175,6 +1295,7 @@ function render() {
     toggleAllBtn.title = allEnabled ? 'Disable all in category' : 'Enable all in category';
     toggleAllBtn.addEventListener('click', e => {
       e.stopPropagation();
+      rememberForgeAction();
       const newState = !allEnabled;
       fields.forEach(f => { f.enabled = newState; });
       render();
@@ -1189,6 +1310,7 @@ function render() {
     lockAllBtn.title = allLocked ? 'Unlock all in category' : 'Lock all in category';
     lockAllBtn.addEventListener('click', e => {
       e.stopPropagation();
+      rememberForgeAction();
       const newState = !allLocked;
       fields.forEach(f => { f.locked = newState; });
       render();
@@ -1203,6 +1325,7 @@ function render() {
     rollBtn.title = 'Randomize all unlocked in category';
     rollBtn.addEventListener('click', e => {
       e.stopPropagation();
+      rememberForgeAction();
       fields.forEach(f => { if (!f.locked && f.enabled) f.value = pickField(f); });
       render();
     });
@@ -1234,6 +1357,7 @@ function render() {
       toggleBtn.title = f.enabled ? 'Remove from prompt' : 'Add to prompt';
       toggleBtn.addEventListener('click', e => {
         e.stopPropagation();
+        rememberForgeAction();
         f.enabled = !f.enabled;
         render();
         if (f.isCustom) saveCustomFields();
@@ -1246,6 +1370,7 @@ function render() {
       lockBtn.title = f.locked ? 'Unlock value' : 'Lock value (safe from randomize)';
       lockBtn.addEventListener('click', e => {
         e.stopPropagation();
+        rememberForgeAction();
         f.locked = !f.locked;
         render();
         if (f.isCustom) saveCustomFields();
@@ -1264,6 +1389,7 @@ function render() {
         removeBtn.title = 'Remove this custom parameter';
         removeBtn.addEventListener('click', e => {
           e.stopPropagation();
+          rememberForgeAction();
           delete state[f.key];
           render();
           saveCustomFields();
@@ -1280,6 +1406,7 @@ function render() {
       valueDiv.title = 'Click to reroll';
       valueDiv.addEventListener('click', e => {
         if (f.locked) return;
+        rememberForgeAction();
         // Show a mini inline editor? No, just reroll:
         f.value = pickField(f);
         render();
@@ -1667,6 +1794,7 @@ function pickField(field) {
 }
 
 function randomizeAll() {
+  rememberForgeAction();
   Object.values(state).forEach(field => {
     if (!field.locked) field.value = pickField(field);
   });
@@ -1675,7 +1803,26 @@ function randomizeAll() {
   toast('↻ All unlocked parameters randomized');
 }
 
+function powerRoll() {
+  rememberForgeAction();
+  const styleChoices = Object.keys(STYLES).filter(name => name !== 'Custom Neon Forge');
+  primaryStyle = styleChoices.length ? pick(styleChoices) : 'Custom Neon Forge';
+  const blendChoices = styleChoices.filter(name => name !== primaryStyle);
+  blendStyle = blendChoices.length && Math.random() < 0.58 ? pick(blendChoices) : '';
+  Object.values(state).forEach(field => {
+    if (!field.locked) field.value = pickField(field);
+  });
+  const bpmField = state[makeKey('Tempo & timing', 'BPM')];
+  if (bpmField && !bpmField.locked && STYLES[primaryStyle]?.bpm) bpmField.value = STYLES[primaryStyle].bpm;
+  normalizeMaximumStyles();
+  promptEdited = false;
+  syncUI();
+  render();
+  toast('⚡ Power roll: style, fusion, emotion, melody, and all unlocked fields forged');
+}
+
 function surprise() {
+  rememberForgeAction();
   Object.values(state).forEach(field => {
     field.value = pickField(field);
     field.locked = Math.random() < 0.2;
@@ -1687,6 +1834,7 @@ function surprise() {
 }
 
 function rollEmotion() {
+  rememberForgeAction();
   let changed = 0;
   Object.values(state).forEach(field => {
     if (field.category === 'Emotional palette' && field.enabled && !field.locked) {
@@ -1700,6 +1848,7 @@ function rollEmotion() {
 }
 
 function rollMelody() {
+  rememberForgeAction();
   const melodyCats = new Set(['Emotional palette', 'Melody & harmony', 'Melodic Architecture', 'Synth palette', 'Tuning & musical physics']);
   let changed = 0;
   Object.values(state).forEach(field => {
@@ -1715,6 +1864,7 @@ function rollMelody() {
 }
 
 function lockEmotion() {
+  rememberForgeAction();
   const fields = Object.values(state).filter(field => field.category === 'Emotional palette');
   if (!fields.length) return;
   const allLocked = fields.every(field => field.locked);
@@ -1788,6 +1938,7 @@ function saveCurrentPreset() {
 }
 
 function loadPreset(preset) {
+  rememberForgeAction();
   // Clear custom fields first
   Object.keys(state).forEach(k => {
     if (state[k].isCustom) delete state[k];
@@ -1849,6 +2000,7 @@ function syncUI() {
   document.querySelectorAll('.prompt-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.view === currentView);
   });
+  syncHistoryButtons();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1886,6 +2038,12 @@ function sparkleOnClick(e) {
   }
 }
 document.addEventListener('click', sparkleOnClick);
+document.addEventListener('keydown', e => {
+  if (e.target.closest && (e.target.closest('[contenteditable="true"]') || e.target.closest('input, textarea, select'))) return;
+  if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return;
+  e.preventDefault();
+  e.shiftKey ? redoForge() : undoForge();
+});
 
 // ═══════════════════════════════════════════════════════════
 //  EVENT BINDING
@@ -1893,6 +2051,7 @@ document.addEventListener('click', sparkleOnClick);
 
 // --- Top bar ---
 document.getElementById('lockAllBtn').addEventListener('click', () => {
+  rememberForgeAction();
   const fields = Object.values(state);
   const allLocked = fields.length > 0 && fields.every(field => field.locked);
   fields.forEach(field => { field.locked = !allLocked; });
@@ -1901,14 +2060,19 @@ document.getElementById('lockAllBtn').addEventListener('click', () => {
 });
 
 document.getElementById('unlockAllBtn').addEventListener('click', () => {
+  rememberForgeAction();
   Object.values(state).forEach(s => s.locked = false);
   render();
   toast('♢ All parameters unlocked');
 });
 
 document.getElementById('randomAllBtn').addEventListener('click', randomizeAll);
+document.getElementById('powerRollBtn').addEventListener('click', powerRoll);
+document.getElementById('undoBtn').addEventListener('click', undoForge);
+document.getElementById('redoBtn').addEventListener('click', redoForge);
 
 document.getElementById('toggleAllBtn').addEventListener('click', () => {
+  rememberForgeAction();
   const anyOff = Object.values(state).some(s => !s.enabled);
   Object.values(state).forEach(s => { s.enabled = anyOff; });
   render();
@@ -1916,6 +2080,7 @@ document.getElementById('toggleAllBtn').addEventListener('click', () => {
 });
 
 document.getElementById('bpmToggleBtn').addEventListener('click', () => {
+  rememberForgeAction();
   includeBpm = !includeBpm;
   const btn = document.getElementById('bpmToggleBtn');
   btn.textContent = includeBpm ? '◉ BPM' : '○ BPM';
@@ -1934,6 +2099,7 @@ document.getElementById('lockEmotionBtn').addEventListener('click', lockEmotion)
 
 // --- Drums only randomize ---
 document.getElementById('drumsBtn').addEventListener('click', () => {
+  rememberForgeAction();
   const drumCats = ['Drum architecture', 'Drum synthesis', 'Rhythm architecture'];
   Object.values(state).forEach(s => {
     if (!s.locked && drumCats.includes(s.category)) s.value = pickField(s);
@@ -1990,6 +2156,7 @@ function setupStyles() {
   });
 
   document.getElementById('applyStyleBtn').addEventListener('click', () => {
+    rememberForgeAction();
     primaryStyle = p.value;
     blendStyle = b.value;
     if (STYLES[primaryStyle]?.bpm && state[makeKey('Tempo & timing', 'BPM')]) {
@@ -2019,6 +2186,7 @@ function setupStyles() {
   });
 
   document.getElementById('melodyToggleBtn').addEventListener('click', () => {
+    rememberForgeAction();
     melodyAlways = !melodyAlways;
     const btn = document.getElementById('melodyToggleBtn');
     btn.classList.toggle('active', melodyAlways);
@@ -2069,6 +2237,7 @@ function addCustomField() {
     toast('Please enter both name and value', true);
     return;
   }
+  rememberForgeAction();
 
   // Parse extra options
   const extraOpts = modalOptionsInput.value.split('\n').map(s => s.trim()).filter(Boolean);
@@ -2156,6 +2325,47 @@ document.getElementById('copyFullBtn').addEventListener('click', async () => {
   }
 });
 
+function buildSunoKit() {
+  const structure = getVal('Arrangement & energy', 'Structure') || 'long DJ-friendly intro, escalating build, massive drop, emotional breakdown, final peak, hard outro';
+  const energy = getVal('Arrangement & energy', 'Energy curve') || 'relentless peak-time energy';
+  const vocal = getVal('Experimental & organic', 'Vocal') || 'instrumental only';
+  const kitLines = [
+    '═══ NEON FORGE — SUNO MAXIMUM KIT ═══',
+    '',
+    'STYLE PROMPT',
+    buildStylePrompt(),
+    '',
+    'FULL BRIEF',
+    buildFullPrompt(),
+    '',
+    'ARRANGEMENT MAP',
+    '[Intro] full-force DJ-ready entrance',
+    '[Build Up] ' + sanitizeMaximumText(energy),
+    '[Drop] maximum kick, bass, lead, and emotional hook impact',
+    '[Breakdown] let the emotional melody breathe without losing scale',
+    '[Climax] biggest harmony, widest synths, relentless drums',
+    '[Outro] ' + sanitizeMaximumText(structure),
+    '',
+    'VOCAL DIRECTION',
+    sanitizeMaximumText(vocal),
+    '',
+    'STRUCTURE TAGS',
+    '[Intro] [Build Up] [Drop] [Breakdown] [Climax] [Outro] instrumental'
+  ];
+  return kitLines.join('\n');
+}
+
+document.getElementById('copyKitBtn').addEventListener('click', async () => {
+  const text = buildSunoKit();
+  saveToHistory(true, text);
+  try {
+    await navigator.clipboard.writeText(text);
+    toast('📦 Complete Suno kit copied (' + text.length + ' chars)');
+  } catch {
+    fallbackCopy(text);
+  }
+});
+
 function fallbackCopy(text) {
   const ta = document.createElement('textarea');
   ta.value = text;
@@ -2172,11 +2382,13 @@ document.getElementById('exportBtn').addEventListener('click', () => {
   saveToHistory(true);
   const styleText = buildStylePrompt();
   const fullText = buildFullPrompt();
+  const kitText = buildSunoKit();
   const content = `═══ NEON FORGE — Suno Techno Prompt ═══\n\n` +
     `Primary Style: ${primaryStyle}${blendStyle ? ' + ' + blendStyle : ''}\n` +
     `Generated: ${new Date().toLocaleString()}\n\n` +
     `── STYLE PROMPT (${styleText.length} chars) ──\n${styleText}\n\n` +
     `── FULL BRIEF (${fullText.length} chars) ──\n${fullText}\n\n` +
+    `── SUNO KIT (${kitText.length} chars) ──\n${kitText}\n\n` +
     `═══ Locked: ${Object.values(state).filter(s=>s.locked).length} · ` +
     `Enabled: ${Object.values(state).filter(s=>s.enabled).length} · ` +
     `Total params: ${Object.values(state).length} ═══`;
@@ -2607,6 +2819,7 @@ document.getElementById('shareBtn').addEventListener('click', shareLink);
 
 // ─── Reset style buttons ───
 document.getElementById('resetMainBtn').addEventListener('click', () => {
+  rememberForgeAction();
   document.getElementById('primaryStyle').value = 'Custom Neon Forge';
   primaryStyle = 'Custom Neon Forge';
   blendStyle = '';
@@ -2618,6 +2831,7 @@ document.getElementById('resetMainBtn').addEventListener('click', () => {
 });
 
 document.getElementById('clearBlendBtn').addEventListener('click', () => {
+  rememberForgeAction();
   blendStyle = '';
   document.getElementById('blendStyle').value = '';
   document.getElementById('blendNote').textContent = 'Build from the full parameter matrix.';
@@ -2628,6 +2842,7 @@ document.getElementById('clearBlendBtn').addEventListener('click', () => {
 
 // ─── Melody intensity ───
 document.getElementById('melodyIntensitySelect').addEventListener('change', e => {
+  rememberForgeAction();
   melodyIntensity = e.target.value;
   if (melodyIntensity === 'drive' || melodyIntensity === 'pure') {
     if (!melodyAlways) {
@@ -2674,6 +2889,7 @@ function generateBatch() {
     useBtn.className = 'btn primary sm';
     useBtn.textContent = '✓ Use this';
     useBtn.addEventListener('click', () => {
+      rememberForgeAction();
       Object.entries(r.state).forEach(([k, v]) => { if (state[k]) { state[k].value = v.value; state[k].locked = v.locked; state[k].enabled = v.enabled; } });
       promptEdited = false;
       render();

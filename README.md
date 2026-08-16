@@ -33,6 +33,12 @@ A 4-level selector under the style deck: **Standard → Focused → Driven → P
 - **Driven** and **Pure Melody** auto-enable "Melody always on"
 - `pickField()` intelligently prefers melodic values from each field's pool
 
+### ⚡ Power roll, undo, and redo (new!)
+**⚡ Power roll** changes the primary style, optional fusion, BPM, emotion, melody, bass, drums, and every unlocked parameter in one maximum-energy move. Every major action is reversible with **↶ Undo**, **↷ Redo**, keyboard shortcuts `Ctrl/Cmd + Z` and `Ctrl/Cmd + Shift + Z`.
+
+### 📦 Suno kit export (new!)
+**📦 Copy Suno kit** creates one paste-ready bundle containing the 1000-character style prompt, complete brief, emotional direction, arrangement map, vocal direction, and structure tags. The `.txt` export includes the same kit.
+
 ### 🎲 Batch Generator (new!)
 Click **🎲 Batch 3** to instantly generate three prompt variations from your current locked/enabled parameters. A modal shows them side-by-side with:
 - **✓ Use this** — loads that variation's exact state into the main tool
@@ -57,10 +63,13 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 - **+ Add custom parameter** — create your own fields with custom random options
 - **💾 Presets** — save/load/delete full configurations
 - **📜 History** — last 6 prompts auto-saved on copy/export
+- **⚡ Power roll** — forge a new style, fusion, BPM, emotion, melody, bass, and drum combination
+- **↶ Undo / ↷ Redo** — reverse major rolls, locks, toggles, presets, and custom-field edits
 - **🔒 Lock all / ♢ Unlock all** — freeze the whole matrix or free it again
 - **⚄ Surprise me** — randomize everything including locks and toggles
 - **🎭 Roll emotion / 🎼 Roll melody** — focused random buttons for happy, aggressive, euphoric, melancholic and many more emotional colors
 - **⚡ Maximum mode** — minimal options are removed and high-impact choices are favored on every roll
+- **📦 Copy Suno kit** — copy Style + Full Brief + arrangement map + tags as one bundle
 - **Balanced 1000-character style sampler** — after core melody/bass/drums, randomized details are selected across the whole matrix so lower categories do not vanish below the fold
 - **Two prompt outputs** (Style ~1000 chars + Full Brief ~3000 chars)
 - **Editable** prompt with live character counter and warning bar
@@ -72,6 +81,9 @@ Click **🔗 Share** to copy a URL that re-opens the tool with the exact same pa
 |---|---|
 | `▶ Play beat` | Hear your parameters as a live synthesized techno groove |
 | `🎵 Melody` selector | 4 levels of melodic bias (Standard → Pure Melody) |
+| `⚡ Power roll` | Randomize the full maximum-energy song identity in one move |
+| `↶ Undo` / `↷ Redo` | Reverse or restore forge actions; also works with Ctrl/Cmd + Z |
+| `📦 Copy Suno kit` | Copy the complete paste-ready Suno bundle |
 | `🎲 Batch 3` | Generate 3 variations, pick the best one |
 | `🏷️ Structure tags` | Click to insert Suno tags at cursor |
 | `↺ Reset main` / `✕ Clear blend` | Reset style selections |
